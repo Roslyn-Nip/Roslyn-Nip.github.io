@@ -930,9 +930,10 @@ img {
 
 .article-section {
   overflow: visible;
-  margin-top: 22px;
+  margin-top: 12px;
   margin-bottom: 0px;
   padding-right: 16%;
+  padding-bottom: 48px;
   padding-left: 16%;
   -o-object-fit: contain;
   object-fit: contain;
@@ -1081,11 +1082,7 @@ img {
 }
 
 .div-block-11 {
-  margin-top: 0%;
-}
-
-.column-9 {
-  padding-bottom: 0px;
+  margin-top: 8%;
 }
 
 .image-50 {
@@ -1358,8 +1355,19 @@ img {
 }
 
 .image-59 {
-  padding-right: 24px;
-  padding-left: 24px;
+  max-width: 80%;
+}
+
+.image-60 {
+  padding-bottom: 48px;
+}
+
+.image-61 {
+  padding-bottom: 48px;
+}
+
+.div-block-24 {
+  padding-bottom: 48px;
 }
 
 @media screen and (min-width: 1440px) {
