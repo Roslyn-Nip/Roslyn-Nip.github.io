@@ -1192,8 +1192,9 @@ img {
   max-width: 100%;
   border-radius: 6px;
   background-image: url('../images/canva_Orvos.gif');
-  background-position: 2% 100%;
+  background-position: 50% 80%;
   background-size: cover;
+  background-repeat: repeat;
 }
 
 .image-53 {
@@ -1212,7 +1213,7 @@ img {
 
 .image-55 {
   position: absolute;
-  top: -29.797px;
+  top: -33.797px;
   overflow: hidden;
 }
 
@@ -1368,6 +1369,11 @@ img {
 
 .div-block-24 {
   padding-bottom: 48px;
+}
+
+.div-block-25 {
+  padding-top: 12px;
+  padding-bottom: 12px;
 }
 
 @media screen and (min-width: 1440px) {
