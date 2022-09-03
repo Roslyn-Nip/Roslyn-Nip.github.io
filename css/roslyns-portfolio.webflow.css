@@ -930,7 +930,7 @@ img {
 
 .article-section {
   overflow: visible;
-  margin-top: 12px;
+  margin-top: 22px;
   margin-bottom: 0px;
   padding-right: 16%;
   padding-left: 16%;
@@ -1081,7 +1081,11 @@ img {
 }
 
 .div-block-11 {
-  margin-top: 8%;
+  margin-top: 0%;
+}
+
+.column-9 {
+  padding-bottom: 0px;
 }
 
 .image-50 {
@@ -1351,6 +1355,11 @@ img {
   font-size: 20px;
   line-height: 24px;
   font-weight: 800;
+}
+
+.image-59 {
+  padding-right: 24px;
+  padding-left: 24px;
 }
 
 @media screen and (min-width: 1440px) {
