@@ -1,8 +1,12 @@
 body {
-  font-family: 'Pt root ui';
+  font-family: 'Gilroy';
   color: #1f1f1f;
   font-size: 1.25vw;
   line-height: 1.5;
+}
+
+a{
+  color:#583152;
 }
 
 img {
