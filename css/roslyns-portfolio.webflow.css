@@ -11,7 +11,7 @@ img {
   padding-top: 0px;
   padding-left: 0px;
   -o-object-fit: fill;
-  object-fit: fill;
+     object-fit: fill;
 }
 
 .section {
@@ -36,7 +36,7 @@ img {
 ._100--width._100--height {
   height: 100%;
   -o-object-fit: cover;
-  object-fit: cover;
+     object-fit: cover;
 }
 
 .work-item {
@@ -192,7 +192,7 @@ img {
   height: 48px;
   background-color: #f8f8f8;
   -o-object-fit: fill;
-  object-fit: fill;
+     object-fit: fill;
 }
 
 .image-2 {
@@ -293,7 +293,7 @@ img {
   background-clip: border-box;
   -webkit-text-fill-color: inherit;
   -o-object-fit: contain;
-  object-fit: contain;
+     object-fit: contain;
 }
 
 .column-2:hover {
@@ -313,14 +313,14 @@ img {
   margin-left: auto;
   padding-left: 0px;
   -o-object-fit: contain;
-  object-fit: contain;
+     object-fit: contain;
 }
 
 .image-7:hover {
   position: static;
   max-width: 90%;
   -o-object-fit: scale-down;
-  object-fit: scale-down;
+     object-fit: scale-down;
 }
 
 .image-8 {
@@ -332,7 +332,7 @@ img {
   padding-left: 0px;
   transition: flex-grow 200ms ease;
   -o-object-fit: contain;
-  object-fit: contain;
+     object-fit: contain;
 }
 
 .image-8:hover {
@@ -352,7 +352,7 @@ img {
   padding-bottom: 0px;
   padding-left: 100px;
   -o-object-fit: contain;
-  object-fit: contain;
+     object-fit: contain;
 }
 
 .heading-2 {
@@ -434,7 +434,7 @@ img {
   padding-top: 0px;
   padding-left: 0px;
   -o-object-fit: fill;
-  object-fit: fill;
+     object-fit: fill;
 }
 
 .arrow-right {
@@ -475,7 +475,7 @@ img {
   max-height: 100%;
   padding-left: 0px;
   -o-object-fit: fill;
-  object-fit: fill;
+     object-fit: fill;
 }
 
 .image-11:hover {
@@ -491,7 +491,7 @@ img {
   margin-left: 77px;
   font-family: Rubik, sans-serif;
   -o-object-fit: fill;
-  object-fit: fill;
+     object-fit: fill;
 }
 
 .image-13 {
@@ -563,7 +563,7 @@ img {
   margin-left: 64px;
   padding-left: 0px;
   -o-object-fit: contain;
-  object-fit: contain;
+     object-fit: contain;
 }
 
 .image-23 {
@@ -572,7 +572,7 @@ img {
   margin-left: 185px;
   padding-left: 0px;
   -o-object-fit: contain;
-  object-fit: contain;
+     object-fit: contain;
 }
 
 .image-24 {
@@ -615,7 +615,7 @@ img {
   max-height: 100%;
   padding-left: 0px;
   -o-object-fit: fill;
-  object-fit: fill;
+     object-fit: fill;
 }
 
 .image-30 {
@@ -642,7 +642,7 @@ img {
   width: 42%;
   padding-left: 0px;
   -o-object-fit: fill;
-  object-fit: fill;
+     object-fit: fill;
 }
 
 .image-33 {
@@ -764,7 +764,7 @@ img {
   background-color: #f8f8f8;
   color: #f8f8f8;
   -o-object-fit: fill;
-  object-fit: fill;
+     object-fit: fill;
 }
 
 .body-2 {
@@ -881,7 +881,7 @@ img {
   padding-bottom: 24px;
   padding-left: 16%;
   -o-object-fit: contain;
-  object-fit: contain;
+     object-fit: contain;
 }
 
 .body-small {
@@ -1276,7 +1276,7 @@ img {
 
 .div-block-29 {
   -o-object-fit: fill;
-  object-fit: fill;
+     object-fit: fill;
 }
 
 .column-14 {
@@ -1317,7 +1317,7 @@ img {
     overflow: hidden;
     padding-top: 25px;
     -o-object-fit: contain;
-    object-fit: contain;
+       object-fit: contain;
   }
 
   .image-8 {
@@ -1611,7 +1611,7 @@ img {
   .image-41 {
     left: 91px;
     -o-object-fit: scale-down;
-    object-fit: scale-down;
+       object-fit: scale-down;
   }
 
   .div-block-6 {
@@ -1714,7 +1714,7 @@ img {
     padding-left: 0px;
     justify-content: center;
     -o-object-fit: fill;
-    object-fit: fill;
+       object-fit: fill;
   }
 
   .image-4 {
