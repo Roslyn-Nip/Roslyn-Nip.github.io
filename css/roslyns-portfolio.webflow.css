@@ -1585,6 +1585,15 @@ img {
   padding-right: 24%;
 }
 
+.html-embed {
+  justify-content: center;
+  display: flex;
+}
+
+.section-5 {
+  padding-bottom: 2%;
+}
+
 @media screen and (min-width: 1440px) {
   .preview-button-2:hover {
     background-color: #583152;
