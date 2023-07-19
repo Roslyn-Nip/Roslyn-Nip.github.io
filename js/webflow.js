@@ -1167,278 +1167,64 @@
     }
   });
 
-  // shared/render/plugins/BaseSiteModules/webflow-scroll.js
-  var require_webflow_scroll = __commonJS({
-    "shared/render/plugins/BaseSiteModules/webflow-scroll.js"(exports, module) {
+  // shared/render/plugins/BaseSiteModules/webflow-brand.js
+  var require_webflow_brand = __commonJS({
+    "shared/render/plugins/BaseSiteModules/webflow-brand.js"(exports, module) {
       var Webflow = require_webflow_lib();
-      Webflow.define("scroll", module.exports = function($) {
-        var NS_EVENTS = {
-          WF_CLICK_EMPTY: "click.wf-empty-link",
-          WF_CLICK_SCROLL: "click.wf-scroll"
-        };
-        var loc = window.location;
-        var history = inIframe() ? null : window.history;
-        var $win = $(window);
-        var $doc = $(document);
-        var $body = $(document.body);
-        var animate = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || function(fn) {
-          window.setTimeout(fn, 15);
-        };
-        var rootTag = Webflow.env("editor") ? ".w-editor-body" : "body";
-        var headerSelector = "header, " + rootTag + " > .header, " + rootTag + " > .w-nav:not([data-no-scroll])";
-        var emptyHrefSelector = 'a[href="#"]';
-        var localHrefSelector = 'a[href*="#"]:not(.w-tab-link):not(' + emptyHrefSelector + ")";
-        var scrollTargetOutlineCSS = '.wf-force-outline-none[tabindex="-1"]:focus{outline:none;}';
-        var focusStylesEl = document.createElement("style");
-        focusStylesEl.appendChild(document.createTextNode(scrollTargetOutlineCSS));
-        function inIframe() {
-          try {
-            return Boolean(window.frameElement);
-          } catch (e) {
-            return true;
-          }
-        }
-        var validHash = /^#[a-zA-Z0-9][\w:.-]*$/;
-        function linksToCurrentPage(link) {
-          return validHash.test(link.hash) && link.host + link.pathname === loc.host + loc.pathname;
-        }
-        const reducedMotionMediaQuery = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)");
-        function reducedMotionEnabled() {
-          return document.body.getAttribute("data-wf-scroll-motion") === "none" || reducedMotionMediaQuery.matches;
-        }
-        function setFocusable($el, action) {
-          var initialTabindex;
-          switch (action) {
-            case "add":
-              initialTabindex = $el.attr("tabindex");
-              if (initialTabindex) {
-                $el.attr("data-wf-tabindex-swap", initialTabindex);
-              } else {
-                $el.attr("tabindex", "-1");
-              }
-              break;
-            case "remove":
-              initialTabindex = $el.attr("data-wf-tabindex-swap");
-              if (initialTabindex) {
-                $el.attr("tabindex", initialTabindex);
-                $el.removeAttr("data-wf-tabindex-swap");
-              } else {
-                $el.removeAttr("tabindex");
-              }
-              break;
-          }
-          $el.toggleClass("wf-force-outline-none", action === "add");
-        }
-        function validateScroll(evt) {
-          var target = evt.currentTarget;
-          if (
-            // Bail if in Designer
-            Webflow.env("design") || // Ignore links being used by jQuery mobile
-            window.$.mobile && /(?:^|\s)ui-link(?:$|\s)/.test(target.className)
-          ) {
-            return;
-          }
-          var hash = linksToCurrentPage(target) ? target.hash : "";
-          if (hash === "")
-            return;
-          var $el = $(hash);
-          if (!$el.length) {
-            return;
-          }
-          if (evt) {
-            evt.preventDefault();
-            evt.stopPropagation();
-          }
-          updateHistory(hash, evt);
-          window.setTimeout(function() {
-            scroll($el, function setFocus() {
-              setFocusable($el, "add");
-              $el.get(0).focus({
-                preventScroll: true
-              });
-              setFocusable($el, "remove");
-            });
-          }, evt ? 0 : 300);
-        }
-        function updateHistory(hash) {
-          if (loc.hash !== hash && history && history.pushState && // Navigation breaks Chrome when the protocol is `file:`.
-          !(Webflow.env.chrome && loc.protocol === "file:")) {
-            var oldHash = history.state && history.state.hash;
-            if (oldHash !== hash) {
-              history.pushState({
-                hash
-              }, "", hash);
-            }
-          }
-        }
-        function scroll($targetEl, cb) {
-          var start = $win.scrollTop();
-          var end = calculateScrollEndPosition($targetEl);
-          if (start === end)
-            return;
-          var duration = calculateScrollDuration($targetEl, start, end);
-          var clock = Date.now();
-          var step = function() {
-            var elapsed = Date.now() - clock;
-            window.scroll(0, getY(start, end, elapsed, duration));
-            if (elapsed <= duration) {
-              animate(step);
-            } else if (typeof cb === "function") {
-              cb();
-            }
-          };
-          animate(step);
-        }
-        function calculateScrollEndPosition($targetEl) {
-          var $header = $(headerSelector);
-          var offsetY = $header.css("position") === "fixed" ? $header.outerHeight() : 0;
-          var end = $targetEl.offset().top - offsetY;
-          if ($targetEl.data("scroll") === "mid") {
-            var available = $win.height() - offsetY;
-            var elHeight = $targetEl.outerHeight();
-            if (elHeight < available) {
-              end -= Math.round((available - elHeight) / 2);
-            }
-          }
-          return end;
-        }
-        function calculateScrollDuration($targetEl, start, end) {
-          if (reducedMotionEnabled())
-            return 0;
-          var mult = 1;
-          $body.add($targetEl).each(function(_, el) {
-            var time = parseFloat(el.getAttribute("data-scroll-time"));
-            if (!isNaN(time) && time >= 0) {
-              mult = time;
-            }
-          });
-          return (472.143 * Math.log(Math.abs(start - end) + 125) - 2e3) * mult;
-        }
-        function getY(start, end, elapsed, duration) {
-          if (elapsed > duration) {
-            return end;
-          }
-          return start + (end - start) * ease(elapsed / duration);
-        }
-        function ease(t) {
-          return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
-        }
-        function ready() {
-          var {
-            WF_CLICK_EMPTY,
-            WF_CLICK_SCROLL
-          } = NS_EVENTS;
-          $doc.on(WF_CLICK_SCROLL, localHrefSelector, validateScroll);
-          $doc.on(WF_CLICK_EMPTY, emptyHrefSelector, function(e) {
-            e.preventDefault();
-          });
-          document.head.insertBefore(focusStylesEl, document.head.firstChild);
-        }
-        return {
-          ready
-        };
-      });
-    }
-  });
-
-  // shared/render/plugins/BaseSiteModules/webflow-touch.js
-  var require_webflow_touch = __commonJS({
-    "shared/render/plugins/BaseSiteModules/webflow-touch.js"(exports, module) {
-      var Webflow = require_webflow_lib();
-      Webflow.define("touch", module.exports = function($) {
+      Webflow.define("brand", module.exports = function($) {
         var api = {};
-        var getSelection = window.getSelection;
-        $.event.special.tap = {
-          bindType: "click",
-          delegateType: "click"
+        var doc = document;
+        var $html = $("html");
+        var $body = $("body");
+        var namespace = ".w-webflow-badge";
+        var location = window.location;
+        var isPhantom = /PhantomJS/i.test(navigator.userAgent);
+        var fullScreenEvents = "fullscreenchange webkitfullscreenchange mozfullscreenchange msfullscreenchange";
+        var brandElement;
+        api.ready = function() {
+          var shouldBrand = $html.attr("data-wf-status");
+          var publishedDomain = $html.attr("data-wf-domain") || "";
+          if (/\.webflow\.io$/i.test(publishedDomain) && location.hostname !== publishedDomain) {
+            shouldBrand = true;
+          }
+          if (shouldBrand && !isPhantom) {
+            brandElement = brandElement || createBadge();
+            ensureBrand();
+            setTimeout(ensureBrand, 500);
+            $(doc).off(fullScreenEvents, onFullScreenChange).on(fullScreenEvents, onFullScreenChange);
+          }
         };
-        api.init = function(el) {
-          el = typeof el === "string" ? $(el).get(0) : el;
-          return el ? new Touch(el) : null;
-        };
-        function Touch(el) {
-          var active = false;
-          var useTouch = false;
-          var thresholdX = Math.min(Math.round(window.innerWidth * 0.04), 40);
-          var startX;
-          var lastX;
-          el.addEventListener("touchstart", start, false);
-          el.addEventListener("touchmove", move, false);
-          el.addEventListener("touchend", end, false);
-          el.addEventListener("touchcancel", cancel, false);
-          el.addEventListener("mousedown", start, false);
-          el.addEventListener("mousemove", move, false);
-          el.addEventListener("mouseup", end, false);
-          el.addEventListener("mouseout", cancel, false);
-          function start(evt) {
-            var touches = evt.touches;
-            if (touches && touches.length > 1) {
-              return;
-            }
-            active = true;
-            if (touches) {
-              useTouch = true;
-              startX = touches[0].clientX;
-            } else {
-              startX = evt.clientX;
-            }
-            lastX = startX;
-          }
-          function move(evt) {
-            if (!active) {
-              return;
-            }
-            if (useTouch && evt.type === "mousemove") {
-              evt.preventDefault();
-              evt.stopPropagation();
-              return;
-            }
-            var touches = evt.touches;
-            var x = touches ? touches[0].clientX : evt.clientX;
-            var velocityX = x - lastX;
-            lastX = x;
-            if (Math.abs(velocityX) > thresholdX && getSelection && String(getSelection()) === "") {
-              triggerEvent("swipe", evt, {
-                direction: velocityX > 0 ? "right" : "left"
-              });
-              cancel();
-            }
-          }
-          function end(evt) {
-            if (!active) {
-              return;
-            }
-            active = false;
-            if (useTouch && evt.type === "mouseup") {
-              evt.preventDefault();
-              evt.stopPropagation();
-              useTouch = false;
-              return;
-            }
-          }
-          function cancel() {
-            active = false;
-          }
-          function destroy() {
-            el.removeEventListener("touchstart", start, false);
-            el.removeEventListener("touchmove", move, false);
-            el.removeEventListener("touchend", end, false);
-            el.removeEventListener("touchcancel", cancel, false);
-            el.removeEventListener("mousedown", start, false);
-            el.removeEventListener("mousemove", move, false);
-            el.removeEventListener("mouseup", end, false);
-            el.removeEventListener("mouseout", cancel, false);
-            el = null;
-          }
-          this.destroy = destroy;
+        function onFullScreenChange() {
+          var fullScreen = doc.fullScreen || doc.mozFullScreen || doc.webkitIsFullScreen || doc.msFullscreenElement || Boolean(doc.webkitFullscreenElement);
+          $(brandElement).attr("style", fullScreen ? "display: none !important;" : "");
         }
-        function triggerEvent(type, evt, data) {
-          var newEvent = $.Event(type, {
-            originalEvent: evt
+        function createBadge() {
+          var $brand = $('<a class="w-webflow-badge"></a>').attr("href", "https://webflow.com?utm_campaign=brandjs");
+          var $logoArt = $("<img>").attr("src", "https://d3e54v103j8qbb.cloudfront.net/img/webflow-badge-icon.f67cd735e3.svg").attr("alt", "").css({
+            marginRight: "8px",
+            width: "16px"
           });
-          $(evt.target).trigger(newEvent, data);
+          var $logoText = $("<img>").attr("src", "https://d1otoma47x30pg.cloudfront.net/img/webflow-badge-text.6faa6a38cd.svg").attr("alt", "Made in Webflow");
+          $brand.append($logoArt, $logoText);
+          return $brand[0];
         }
-        api.instance = api.init(document);
+        function ensureBrand() {
+          var found = $body.children(namespace);
+          var match = found.length && found.get(0) === brandElement;
+          var inEditor = Webflow.env("editor");
+          if (match) {
+            if (inEditor) {
+              found.remove();
+            }
+            return;
+          }
+          if (found.length) {
+            found.remove();
+          }
+          if (!inEditor) {
+            $body.append(brandElement);
+          }
+        }
         return api;
       });
     }
@@ -1595,94 +1381,6 @@
     }
   });
 
-  // shared/render/plugins/BaseSiteModules/webflow-links.js
-  var require_webflow_links = __commonJS({
-    "shared/render/plugins/BaseSiteModules/webflow-links.js"(exports, module) {
-      var Webflow = require_webflow_lib();
-      Webflow.define("links", module.exports = function($, _) {
-        var api = {};
-        var $win = $(window);
-        var designer;
-        var inApp = Webflow.env();
-        var location = window.location;
-        var tempLink = document.createElement("a");
-        var linkCurrent = "w--current";
-        var indexPage = /index\.(html|php)$/;
-        var dirList = /\/$/;
-        var anchors;
-        var slug;
-        api.ready = api.design = api.preview = init;
-        function init() {
-          designer = inApp && Webflow.env("design");
-          slug = Webflow.env("slug") || location.pathname || "";
-          Webflow.scroll.off(scroll);
-          anchors = [];
-          var links = document.links;
-          for (var i = 0; i < links.length; ++i) {
-            select(links[i]);
-          }
-          if (anchors.length) {
-            Webflow.scroll.on(scroll);
-            scroll();
-          }
-        }
-        function select(link) {
-          var href = designer && link.getAttribute("href-disabled") || link.getAttribute("href");
-          tempLink.href = href;
-          if (href.indexOf(":") >= 0) {
-            return;
-          }
-          var $link = $(link);
-          if (tempLink.hash.length > 1 && tempLink.host + tempLink.pathname === location.host + location.pathname) {
-            if (!/^#[a-zA-Z0-9\-\_]+$/.test(tempLink.hash)) {
-              return;
-            }
-            var $section = $(tempLink.hash);
-            $section.length && anchors.push({
-              link: $link,
-              sec: $section,
-              active: false
-            });
-            return;
-          }
-          if (href === "#" || href === "") {
-            return;
-          }
-          var match = tempLink.href === location.href || href === slug || indexPage.test(href) && dirList.test(slug);
-          setClass($link, linkCurrent, match);
-        }
-        function scroll() {
-          var viewTop = $win.scrollTop();
-          var viewHeight = $win.height();
-          _.each(anchors, function(anchor) {
-            var $link = anchor.link;
-            var $section = anchor.sec;
-            var top = $section.offset().top;
-            var height = $section.outerHeight();
-            var offset = viewHeight * 0.5;
-            var active = $section.is(":visible") && top + height - offset >= viewTop && top + offset <= viewTop + viewHeight;
-            if (anchor.active === active) {
-              return;
-            }
-            anchor.active = active;
-            setClass($link, linkCurrent, active);
-          });
-        }
-        function setClass($elem, className, add) {
-          var exists = $elem.hasClass(className);
-          if (add && exists) {
-            return;
-          }
-          if (!add && !exists) {
-            return;
-          }
-          add ? $elem.addClass(className) : $elem.removeClass(className);
-        }
-        return api;
-      });
-    }
-  });
-
   // shared/render/plugins/BaseSiteModules/webflow-focus.js
   var require_webflow_focus = __commonJS({
     "shared/render/plugins/BaseSiteModules/webflow-focus.js"(exports, module) {
@@ -1825,586 +1523,6 @@
       };
       $.extend(api.triggers, eventTriggers);
       module.exports = api;
-    }
-  });
-
-  // shared/render/plugins/BaseSiteModules/webflow-focus-within.js
-  var require_webflow_focus_within = __commonJS({
-    "shared/render/plugins/BaseSiteModules/webflow-focus-within.js"(exports, module) {
-      var Webflow = require_webflow_lib();
-      Webflow.define("focus-within", module.exports = function() {
-        function computeEventPath(node) {
-          var path = [node];
-          var parent = null;
-          while (parent = node.parentNode || node.host || node.defaultView) {
-            path.push(parent);
-            node = parent;
-          }
-          return path;
-        }
-        function addFocusWithinAttribute(el) {
-          if (typeof el.getAttribute !== "function" || el.getAttribute("data-wf-focus-within")) {
-            return;
-          }
-          el.setAttribute("data-wf-focus-within", "true");
-        }
-        function removeFocusWithinAttribute(el) {
-          if (typeof el.getAttribute !== "function" || !el.getAttribute("data-wf-focus-within")) {
-            return;
-          }
-          el.removeAttribute("data-wf-focus-within");
-        }
-        function loadFocusWithinPolyfill() {
-          var handler = function(e) {
-            var running;
-            function action() {
-              running = false;
-              if ("blur" === e.type) {
-                Array.prototype.slice.call(computeEventPath(e.target)).forEach(removeFocusWithinAttribute);
-              }
-              if ("focus" === e.type) {
-                Array.prototype.slice.call(computeEventPath(e.target)).forEach(addFocusWithinAttribute);
-              }
-            }
-            if (!running) {
-              window.requestAnimationFrame(action);
-              running = true;
-            }
-          };
-          document.addEventListener("focus", handler, true);
-          document.addEventListener("blur", handler, true);
-          addFocusWithinAttribute(document.body);
-          return true;
-        }
-        function ready() {
-          if (typeof document !== "undefined" && document.body.hasAttribute("data-wf-focus-within")) {
-            try {
-              document.querySelector(":focus-within");
-            } catch (e) {
-              loadFocusWithinPolyfill();
-            }
-          }
-        }
-        return {
-          ready
-        };
-      });
-    }
-  });
-
-  // shared/render/plugins/BaseSiteModules/webflow-brand.js
-  var require_webflow_brand = __commonJS({
-    "shared/render/plugins/BaseSiteModules/webflow-brand.js"(exports, module) {
-      var Webflow = require_webflow_lib();
-      Webflow.define("brand", module.exports = function($) {
-        var api = {};
-        var doc = document;
-        var $html = $("html");
-        var $body = $("body");
-        var namespace = ".w-webflow-badge";
-        var location = window.location;
-        var isPhantom = /PhantomJS/i.test(navigator.userAgent);
-        var fullScreenEvents = "fullscreenchange webkitfullscreenchange mozfullscreenchange msfullscreenchange";
-        var brandElement;
-        api.ready = function() {
-          var shouldBrand = $html.attr("data-wf-status");
-          var publishedDomain = $html.attr("data-wf-domain") || "";
-          if (/\.webflow\.io$/i.test(publishedDomain) && location.hostname !== publishedDomain) {
-            shouldBrand = true;
-          }
-          if (shouldBrand && !isPhantom) {
-            brandElement = brandElement || createBadge();
-            ensureBrand();
-            setTimeout(ensureBrand, 500);
-            $(doc).off(fullScreenEvents, onFullScreenChange).on(fullScreenEvents, onFullScreenChange);
-          }
-        };
-        function onFullScreenChange() {
-          var fullScreen = doc.fullScreen || doc.mozFullScreen || doc.webkitIsFullScreen || doc.msFullscreenElement || Boolean(doc.webkitFullscreenElement);
-          $(brandElement).attr("style", fullScreen ? "display: none !important;" : "");
-        }
-        function createBadge() {
-          var $brand = $('<a class="w-webflow-badge"></a>').attr("href", "https://webflow.com?utm_campaign=brandjs");
-          var $logoArt = $("<img>").attr("src", "https://d3e54v103j8qbb.cloudfront.net/img/webflow-badge-icon.f67cd735e3.svg").attr("alt", "").css({
-            marginRight: "8px",
-            width: "16px"
-          });
-          var $logoText = $("<img>").attr("src", "https://d1otoma47x30pg.cloudfront.net/img/webflow-badge-text.6faa6a38cd.svg").attr("alt", "Made in Webflow");
-          $brand.append($logoArt, $logoText);
-          return $brand[0];
-        }
-        function ensureBrand() {
-          var found = $body.children(namespace);
-          var match = found.length && found.get(0) === brandElement;
-          var inEditor = Webflow.env("editor");
-          if (match) {
-            if (inEditor) {
-              found.remove();
-            }
-            return;
-          }
-          if (found.length) {
-            found.remove();
-          }
-          if (!inEditor) {
-            $body.append(brandElement);
-          }
-        }
-        return api;
-      });
-    }
-  });
-
-  // shared/render/plugins/Navbar/webflow-navbar.js
-  var require_webflow_navbar = __commonJS({
-    "shared/render/plugins/Navbar/webflow-navbar.js"(exports, module) {
-      var Webflow = require_webflow_lib();
-      var IXEvents = require_webflow_ix2_events();
-      var KEY_CODES = {
-        ARROW_LEFT: 37,
-        ARROW_UP: 38,
-        ARROW_RIGHT: 39,
-        ARROW_DOWN: 40,
-        ESCAPE: 27,
-        SPACE: 32,
-        ENTER: 13,
-        HOME: 36,
-        END: 35
-      };
-      Webflow.define("navbar", module.exports = function($, _) {
-        var api = {};
-        var tram = $.tram;
-        var $win = $(window);
-        var $doc = $(document);
-        var debounce = _.debounce;
-        var $body;
-        var $navbars;
-        var designer;
-        var inEditor;
-        var inApp = Webflow.env();
-        var overlay = '<div class="w-nav-overlay" data-wf-ignore />';
-        var namespace = ".w-nav";
-        var navbarOpenedButton = "w--open";
-        var navbarOpenedDropdown = "w--nav-dropdown-open";
-        var navbarOpenedDropdownToggle = "w--nav-dropdown-toggle-open";
-        var navbarOpenedDropdownList = "w--nav-dropdown-list-open";
-        var navbarOpenedLink = "w--nav-link-open";
-        var ix = IXEvents.triggers;
-        var menuSibling = $();
-        api.ready = api.design = api.preview = init;
-        api.destroy = function() {
-          menuSibling = $();
-          removeListeners();
-          if ($navbars && $navbars.length) {
-            $navbars.each(teardown);
-          }
-        };
-        function init() {
-          designer = inApp && Webflow.env("design");
-          inEditor = Webflow.env("editor");
-          $body = $(document.body);
-          $navbars = $doc.find(namespace);
-          if (!$navbars.length) {
-            return;
-          }
-          $navbars.each(build);
-          removeListeners();
-          addListeners();
-        }
-        function removeListeners() {
-          Webflow.resize.off(resizeAll);
-        }
-        function addListeners() {
-          Webflow.resize.on(resizeAll);
-        }
-        function resizeAll() {
-          $navbars.each(resize);
-        }
-        function build(i, el) {
-          var $el = $(el);
-          var data = $.data(el, namespace);
-          if (!data) {
-            data = $.data(el, namespace, {
-              open: false,
-              el: $el,
-              config: {},
-              selectedIdx: -1
-            });
-          }
-          data.menu = $el.find(".w-nav-menu");
-          data.links = data.menu.find(".w-nav-link");
-          data.dropdowns = data.menu.find(".w-dropdown");
-          data.dropdownToggle = data.menu.find(".w-dropdown-toggle");
-          data.dropdownList = data.menu.find(".w-dropdown-list");
-          data.button = $el.find(".w-nav-button");
-          data.container = $el.find(".w-container");
-          data.overlayContainerId = "w-nav-overlay-" + i;
-          data.outside = outside(data);
-          var navBrandLink = $el.find(".w-nav-brand");
-          if (navBrandLink && navBrandLink.attr("href") === "/" && navBrandLink.attr("aria-label") == null) {
-            navBrandLink.attr("aria-label", "home");
-          }
-          data.button.attr("style", "-webkit-user-select: text;");
-          if (data.button.attr("aria-label") == null) {
-            data.button.attr("aria-label", "menu");
-          }
-          data.button.attr("role", "button");
-          data.button.attr("tabindex", "0");
-          data.button.attr("aria-controls", data.overlayContainerId);
-          data.button.attr("aria-haspopup", "menu");
-          data.button.attr("aria-expanded", "false");
-          data.el.off(namespace);
-          data.button.off(namespace);
-          data.menu.off(namespace);
-          configure(data);
-          if (designer) {
-            removeOverlay(data);
-            data.el.on("setting" + namespace, handler(data));
-          } else {
-            addOverlay(data);
-            data.button.on("click" + namespace, toggle(data));
-            data.menu.on("click" + namespace, "a", navigate(data));
-            data.button.on("keydown" + namespace, makeToggleButtonKeyboardHandler(data));
-            data.el.on("keydown" + namespace, makeLinksKeyboardHandler(data));
-          }
-          resize(i, el);
-        }
-        function teardown(i, el) {
-          var data = $.data(el, namespace);
-          if (data) {
-            removeOverlay(data);
-            $.removeData(el, namespace);
-          }
-        }
-        function removeOverlay(data) {
-          if (!data.overlay) {
-            return;
-          }
-          close(data, true);
-          data.overlay.remove();
-          data.overlay = null;
-        }
-        function addOverlay(data) {
-          if (data.overlay) {
-            return;
-          }
-          data.overlay = $(overlay).appendTo(data.el);
-          data.overlay.attr("id", data.overlayContainerId);
-          data.parent = data.menu.parent();
-          close(data, true);
-        }
-        function configure(data) {
-          var config = {};
-          var old = data.config || {};
-          var animation = config.animation = data.el.attr("data-animation") || "default";
-          config.animOver = /^over/.test(animation);
-          config.animDirect = /left$/.test(animation) ? -1 : 1;
-          if (old.animation !== animation) {
-            data.open && _.defer(reopen, data);
-          }
-          config.easing = data.el.attr("data-easing") || "ease";
-          config.easing2 = data.el.attr("data-easing2") || "ease";
-          var duration = data.el.attr("data-duration");
-          config.duration = duration != null ? Number(duration) : 400;
-          config.docHeight = data.el.attr("data-doc-height");
-          data.config = config;
-        }
-        function handler(data) {
-          return function(evt, options) {
-            options = options || {};
-            var winWidth = $win.width();
-            configure(data);
-            options.open === true && open(data, true);
-            options.open === false && close(data, true);
-            data.open && _.defer(function() {
-              if (winWidth !== $win.width()) {
-                reopen(data);
-              }
-            });
-          };
-        }
-        function makeToggleButtonKeyboardHandler(data) {
-          return function(evt) {
-            switch (evt.keyCode) {
-              case KEY_CODES.SPACE:
-              case KEY_CODES.ENTER: {
-                toggle(data)();
-                evt.preventDefault();
-                return evt.stopPropagation();
-              }
-              case KEY_CODES.ESCAPE: {
-                close(data);
-                evt.preventDefault();
-                return evt.stopPropagation();
-              }
-              case KEY_CODES.ARROW_RIGHT:
-              case KEY_CODES.ARROW_DOWN:
-              case KEY_CODES.HOME:
-              case KEY_CODES.END: {
-                if (!data.open) {
-                  evt.preventDefault();
-                  return evt.stopPropagation();
-                }
-                if (evt.keyCode === KEY_CODES.END) {
-                  data.selectedIdx = data.links.length - 1;
-                } else {
-                  data.selectedIdx = 0;
-                }
-                focusSelectedLink(data);
-                evt.preventDefault();
-                return evt.stopPropagation();
-              }
-            }
-          };
-        }
-        function makeLinksKeyboardHandler(data) {
-          return function(evt) {
-            if (!data.open) {
-              return;
-            }
-            data.selectedIdx = data.links.index(document.activeElement);
-            switch (evt.keyCode) {
-              case KEY_CODES.HOME:
-              case KEY_CODES.END: {
-                if (evt.keyCode === KEY_CODES.END) {
-                  data.selectedIdx = data.links.length - 1;
-                } else {
-                  data.selectedIdx = 0;
-                }
-                focusSelectedLink(data);
-                evt.preventDefault();
-                return evt.stopPropagation();
-              }
-              case KEY_CODES.ESCAPE: {
-                close(data);
-                data.button.focus();
-                evt.preventDefault();
-                return evt.stopPropagation();
-              }
-              case KEY_CODES.ARROW_LEFT:
-              case KEY_CODES.ARROW_UP: {
-                data.selectedIdx = Math.max(-1, data.selectedIdx - 1);
-                focusSelectedLink(data);
-                evt.preventDefault();
-                return evt.stopPropagation();
-              }
-              case KEY_CODES.ARROW_RIGHT:
-              case KEY_CODES.ARROW_DOWN: {
-                data.selectedIdx = Math.min(data.links.length - 1, data.selectedIdx + 1);
-                focusSelectedLink(data);
-                evt.preventDefault();
-                return evt.stopPropagation();
-              }
-            }
-          };
-        }
-        function focusSelectedLink(data) {
-          if (data.links[data.selectedIdx]) {
-            var selectedElement = data.links[data.selectedIdx];
-            selectedElement.focus();
-            navigate(selectedElement);
-          }
-        }
-        function reopen(data) {
-          if (!data.open) {
-            return;
-          }
-          close(data, true);
-          open(data, true);
-        }
-        function toggle(data) {
-          return debounce(function() {
-            data.open ? close(data) : open(data);
-          });
-        }
-        function navigate(data) {
-          return function(evt) {
-            var link = $(this);
-            var href = link.attr("href");
-            if (!Webflow.validClick(evt.currentTarget)) {
-              evt.preventDefault();
-              return;
-            }
-            if (href && href.indexOf("#") === 0 && data.open) {
-              close(data);
-            }
-          };
-        }
-        function outside(data) {
-          if (data.outside) {
-            $doc.off("click" + namespace, data.outside);
-          }
-          return function(evt) {
-            var $target = $(evt.target);
-            if (inEditor && $target.closest(".w-editor-bem-EditorOverlay").length) {
-              return;
-            }
-            outsideDebounced(data, $target);
-          };
-        }
-        var outsideDebounced = debounce(function(data, $target) {
-          if (!data.open) {
-            return;
-          }
-          var menu = $target.closest(".w-nav-menu");
-          if (!data.menu.is(menu)) {
-            close(data);
-          }
-        });
-        function resize(i, el) {
-          var data = $.data(el, namespace);
-          var collapsed = data.collapsed = data.button.css("display") !== "none";
-          if (data.open && !collapsed && !designer) {
-            close(data, true);
-          }
-          if (data.container.length) {
-            var updateEachMax = updateMax(data);
-            data.links.each(updateEachMax);
-            data.dropdowns.each(updateEachMax);
-          }
-          if (data.open) {
-            setOverlayHeight(data);
-          }
-        }
-        var maxWidth = "max-width";
-        function updateMax(data) {
-          var containMax = data.container.css(maxWidth);
-          if (containMax === "none") {
-            containMax = "";
-          }
-          return function(i, link) {
-            link = $(link);
-            link.css(maxWidth, "");
-            if (link.css(maxWidth) === "none") {
-              link.css(maxWidth, containMax);
-            }
-          };
-        }
-        function addMenuOpen(i, el) {
-          el.setAttribute("data-nav-menu-open", "");
-        }
-        function removeMenuOpen(i, el) {
-          el.removeAttribute("data-nav-menu-open");
-        }
-        function open(data, immediate) {
-          if (data.open) {
-            return;
-          }
-          data.open = true;
-          data.menu.each(addMenuOpen);
-          data.links.addClass(navbarOpenedLink);
-          data.dropdowns.addClass(navbarOpenedDropdown);
-          data.dropdownToggle.addClass(navbarOpenedDropdownToggle);
-          data.dropdownList.addClass(navbarOpenedDropdownList);
-          data.button.addClass(navbarOpenedButton);
-          var config = data.config;
-          var animation = config.animation;
-          if (animation === "none" || !tram.support.transform || config.duration <= 0) {
-            immediate = true;
-          }
-          var bodyHeight = setOverlayHeight(data);
-          var menuHeight = data.menu.outerHeight(true);
-          var menuWidth = data.menu.outerWidth(true);
-          var navHeight = data.el.height();
-          var navbarEl = data.el[0];
-          resize(0, navbarEl);
-          ix.intro(0, navbarEl);
-          Webflow.redraw.up();
-          if (!designer) {
-            $doc.on("click" + namespace, data.outside);
-          }
-          if (immediate) {
-            complete();
-            return;
-          }
-          var transConfig = "transform " + config.duration + "ms " + config.easing;
-          if (data.overlay) {
-            menuSibling = data.menu.prev();
-            data.overlay.show().append(data.menu);
-          }
-          if (config.animOver) {
-            tram(data.menu).add(transConfig).set({
-              x: config.animDirect * menuWidth,
-              height: bodyHeight
-            }).start({
-              x: 0
-            }).then(complete);
-            data.overlay && data.overlay.width(menuWidth);
-            return;
-          }
-          var offsetY = navHeight + menuHeight;
-          tram(data.menu).add(transConfig).set({
-            y: -offsetY
-          }).start({
-            y: 0
-          }).then(complete);
-          function complete() {
-            data.button.attr("aria-expanded", "true");
-          }
-        }
-        function setOverlayHeight(data) {
-          var config = data.config;
-          var bodyHeight = config.docHeight ? $doc.height() : $body.height();
-          if (config.animOver) {
-            data.menu.height(bodyHeight);
-          } else if (data.el.css("position") !== "fixed") {
-            bodyHeight -= data.el.outerHeight(true);
-          }
-          data.overlay && data.overlay.height(bodyHeight);
-          return bodyHeight;
-        }
-        function close(data, immediate) {
-          if (!data.open) {
-            return;
-          }
-          data.open = false;
-          data.button.removeClass(navbarOpenedButton);
-          var config = data.config;
-          if (config.animation === "none" || !tram.support.transform || config.duration <= 0) {
-            immediate = true;
-          }
-          ix.outro(0, data.el[0]);
-          $doc.off("click" + namespace, data.outside);
-          if (immediate) {
-            tram(data.menu).stop();
-            complete();
-            return;
-          }
-          var transConfig = "transform " + config.duration + "ms " + config.easing2;
-          var menuHeight = data.menu.outerHeight(true);
-          var menuWidth = data.menu.outerWidth(true);
-          var navHeight = data.el.height();
-          if (config.animOver) {
-            tram(data.menu).add(transConfig).start({
-              x: menuWidth * config.animDirect
-            }).then(complete);
-            return;
-          }
-          var offsetY = navHeight + menuHeight;
-          tram(data.menu).add(transConfig).start({
-            y: -offsetY
-          }).then(complete);
-          function complete() {
-            data.menu.height("");
-            tram(data.menu).set({
-              x: 0,
-              y: 0
-            });
-            data.menu.each(removeMenuOpen);
-            data.links.removeClass(navbarOpenedLink);
-            data.dropdowns.removeClass(navbarOpenedDropdown);
-            data.dropdownToggle.removeClass(navbarOpenedDropdownToggle);
-            data.dropdownList.removeClass(navbarOpenedDropdownList);
-            if (data.overlay && data.overlay.children().length) {
-              menuSibling.length ? data.menu.insertAfter(menuSibling) : data.menu.prependTo(data.parent);
-              data.overlay.attr("style", "").hide();
-            }
-            data.el.triggerHandler("w-close");
-            data.button.attr("aria-expanded", "false");
-          }
-        }
-        return api;
-      });
     }
   });
 
@@ -3702,17 +2820,17 @@
     }
   });
 
-  // node_modules/redux/node_modules/lodash/_freeGlobal.js
+  // node_modules/lodash/_freeGlobal.js
   var require_freeGlobal = __commonJS({
-    "node_modules/redux/node_modules/lodash/_freeGlobal.js"(exports, module) {
+    "node_modules/lodash/_freeGlobal.js"(exports, module) {
       var freeGlobal = typeof global == "object" && global && global.Object === Object && global;
       module.exports = freeGlobal;
     }
   });
 
-  // node_modules/redux/node_modules/lodash/_root.js
+  // node_modules/lodash/_root.js
   var require_root = __commonJS({
-    "node_modules/redux/node_modules/lodash/_root.js"(exports, module) {
+    "node_modules/lodash/_root.js"(exports, module) {
       var freeGlobal = require_freeGlobal();
       var freeSelf = typeof self == "object" && self && self.Object === Object && self;
       var root = freeGlobal || freeSelf || Function("return this")();
@@ -3720,18 +2838,18 @@
     }
   });
 
-  // node_modules/redux/node_modules/lodash/_Symbol.js
+  // node_modules/lodash/_Symbol.js
   var require_Symbol = __commonJS({
-    "node_modules/redux/node_modules/lodash/_Symbol.js"(exports, module) {
+    "node_modules/lodash/_Symbol.js"(exports, module) {
       var root = require_root();
       var Symbol2 = root.Symbol;
       module.exports = Symbol2;
     }
   });
 
-  // node_modules/redux/node_modules/lodash/_getRawTag.js
+  // node_modules/lodash/_getRawTag.js
   var require_getRawTag = __commonJS({
-    "node_modules/redux/node_modules/lodash/_getRawTag.js"(exports, module) {
+    "node_modules/lodash/_getRawTag.js"(exports, module) {
       var Symbol2 = require_Symbol();
       var objectProto = Object.prototype;
       var hasOwnProperty = objectProto.hasOwnProperty;
@@ -3758,9 +2876,9 @@
     }
   });
 
-  // node_modules/redux/node_modules/lodash/_objectToString.js
+  // node_modules/lodash/_objectToString.js
   var require_objectToString = __commonJS({
-    "node_modules/redux/node_modules/lodash/_objectToString.js"(exports, module) {
+    "node_modules/lodash/_objectToString.js"(exports, module) {
       var objectProto = Object.prototype;
       var nativeObjectToString = objectProto.toString;
       function objectToString(value) {
@@ -3770,9 +2888,9 @@
     }
   });
 
-  // node_modules/redux/node_modules/lodash/_baseGetTag.js
+  // node_modules/lodash/_baseGetTag.js
   var require_baseGetTag = __commonJS({
-    "node_modules/redux/node_modules/lodash/_baseGetTag.js"(exports, module) {
+    "node_modules/lodash/_baseGetTag.js"(exports, module) {
       var Symbol2 = require_Symbol();
       var getRawTag = require_getRawTag();
       var objectToString = require_objectToString();
@@ -3789,9 +2907,9 @@
     }
   });
 
-  // node_modules/redux/node_modules/lodash/_overArg.js
+  // node_modules/lodash/_overArg.js
   var require_overArg = __commonJS({
-    "node_modules/redux/node_modules/lodash/_overArg.js"(exports, module) {
+    "node_modules/lodash/_overArg.js"(exports, module) {
       function overArg(func, transform) {
         return function(arg) {
           return func(transform(arg));
@@ -3801,18 +2919,18 @@
     }
   });
 
-  // node_modules/redux/node_modules/lodash/_getPrototype.js
+  // node_modules/lodash/_getPrototype.js
   var require_getPrototype = __commonJS({
-    "node_modules/redux/node_modules/lodash/_getPrototype.js"(exports, module) {
+    "node_modules/lodash/_getPrototype.js"(exports, module) {
       var overArg = require_overArg();
       var getPrototype = overArg(Object.getPrototypeOf, Object);
       module.exports = getPrototype;
     }
   });
 
-  // node_modules/redux/node_modules/lodash/isObjectLike.js
+  // node_modules/lodash/isObjectLike.js
   var require_isObjectLike = __commonJS({
-    "node_modules/redux/node_modules/lodash/isObjectLike.js"(exports, module) {
+    "node_modules/lodash/isObjectLike.js"(exports, module) {
       function isObjectLike(value) {
         return value != null && typeof value == "object";
       }
@@ -3820,9 +2938,9 @@
     }
   });
 
-  // node_modules/redux/node_modules/lodash/isPlainObject.js
+  // node_modules/lodash/isPlainObject.js
   var require_isPlainObject = __commonJS({
-    "node_modules/redux/node_modules/lodash/isPlainObject.js"(exports, module) {
+    "node_modules/lodash/isPlainObject.js"(exports, module) {
       var baseGetTag = require_baseGetTag();
       var getPrototype = require_getPrototype();
       var isObjectLike = require_isObjectLike();
@@ -4400,7 +3518,9 @@
         STYLE_BACKGROUND_COLOR: "STYLE_BACKGROUND_COLOR",
         STYLE_BORDER: "STYLE_BORDER",
         STYLE_TEXT_COLOR: "STYLE_TEXT_COLOR",
+        OBJECT_VALUE: "OBJECT_VALUE",
         PLUGIN_LOTTIE: "PLUGIN_LOTTIE",
+        PLUGIN_SPLINE: "PLUGIN_SPLINE",
         GENERAL_DISPLAY: "GENERAL_DISPLAY",
         GENERAL_START_ACTION: "GENERAL_START_ACTION",
         GENERAL_CONTINUOUS_ACTION: "GENERAL_CONTINUOUS_ACTION",
@@ -5380,93 +4500,6 @@
     }
   });
 
-  // node_modules/lodash/_freeGlobal.js
-  var require_freeGlobal2 = __commonJS({
-    "node_modules/lodash/_freeGlobal.js"(exports, module) {
-      var freeGlobal = typeof global == "object" && global && global.Object === Object && global;
-      module.exports = freeGlobal;
-    }
-  });
-
-  // node_modules/lodash/_root.js
-  var require_root2 = __commonJS({
-    "node_modules/lodash/_root.js"(exports, module) {
-      var freeGlobal = require_freeGlobal2();
-      var freeSelf = typeof self == "object" && self && self.Object === Object && self;
-      var root = freeGlobal || freeSelf || Function("return this")();
-      module.exports = root;
-    }
-  });
-
-  // node_modules/lodash/_Symbol.js
-  var require_Symbol2 = __commonJS({
-    "node_modules/lodash/_Symbol.js"(exports, module) {
-      var root = require_root2();
-      var Symbol2 = root.Symbol;
-      module.exports = Symbol2;
-    }
-  });
-
-  // node_modules/lodash/_getRawTag.js
-  var require_getRawTag2 = __commonJS({
-    "node_modules/lodash/_getRawTag.js"(exports, module) {
-      var Symbol2 = require_Symbol2();
-      var objectProto = Object.prototype;
-      var hasOwnProperty = objectProto.hasOwnProperty;
-      var nativeObjectToString = objectProto.toString;
-      var symToStringTag = Symbol2 ? Symbol2.toStringTag : void 0;
-      function getRawTag(value) {
-        var isOwn = hasOwnProperty.call(value, symToStringTag), tag = value[symToStringTag];
-        try {
-          value[symToStringTag] = void 0;
-          var unmasked = true;
-        } catch (e) {
-        }
-        var result = nativeObjectToString.call(value);
-        if (unmasked) {
-          if (isOwn) {
-            value[symToStringTag] = tag;
-          } else {
-            delete value[symToStringTag];
-          }
-        }
-        return result;
-      }
-      module.exports = getRawTag;
-    }
-  });
-
-  // node_modules/lodash/_objectToString.js
-  var require_objectToString2 = __commonJS({
-    "node_modules/lodash/_objectToString.js"(exports, module) {
-      var objectProto = Object.prototype;
-      var nativeObjectToString = objectProto.toString;
-      function objectToString(value) {
-        return nativeObjectToString.call(value);
-      }
-      module.exports = objectToString;
-    }
-  });
-
-  // node_modules/lodash/_baseGetTag.js
-  var require_baseGetTag2 = __commonJS({
-    "node_modules/lodash/_baseGetTag.js"(exports, module) {
-      var Symbol2 = require_Symbol2();
-      var getRawTag = require_getRawTag2();
-      var objectToString = require_objectToString2();
-      var nullTag = "[object Null]";
-      var undefinedTag = "[object Undefined]";
-      var symToStringTag = Symbol2 ? Symbol2.toStringTag : void 0;
-      function baseGetTag(value) {
-        if (value == null) {
-          return value === void 0 ? undefinedTag : nullTag;
-        }
-        return symToStringTag && symToStringTag in Object(value) ? getRawTag(value) : objectToString(value);
-      }
-      module.exports = baseGetTag;
-    }
-  });
-
   // node_modules/lodash/isObject.js
   var require_isObject = __commonJS({
     "node_modules/lodash/isObject.js"(exports, module) {
@@ -5481,7 +4514,7 @@
   // node_modules/lodash/isFunction.js
   var require_isFunction = __commonJS({
     "node_modules/lodash/isFunction.js"(exports, module) {
-      var baseGetTag = require_baseGetTag2();
+      var baseGetTag = require_baseGetTag();
       var isObject = require_isObject();
       var asyncTag = "[object AsyncFunction]";
       var funcTag = "[object Function]";
@@ -5501,7 +4534,7 @@
   // node_modules/lodash/_coreJsData.js
   var require_coreJsData = __commonJS({
     "node_modules/lodash/_coreJsData.js"(exports, module) {
-      var root = require_root2();
+      var root = require_root();
       var coreJsData = root["__core-js_shared__"];
       module.exports = coreJsData;
     }
@@ -5598,9 +4631,9 @@
   var require_Map = __commonJS({
     "node_modules/lodash/_Map.js"(exports, module) {
       var getNative = require_getNative();
-      var root = require_root2();
-      var Map = getNative(root, "Map");
-      module.exports = Map;
+      var root = require_root();
+      var Map2 = getNative(root, "Map");
+      module.exports = Map2;
     }
   });
 
@@ -5715,12 +4748,12 @@
     "node_modules/lodash/_mapCacheClear.js"(exports, module) {
       var Hash = require_Hash();
       var ListCache = require_ListCache();
-      var Map = require_Map();
+      var Map2 = require_Map();
       function mapCacheClear() {
         this.size = 0;
         this.__data__ = {
           "hash": new Hash(),
-          "map": new (Map || ListCache)(),
+          "map": new (Map2 || ListCache)(),
           "string": new Hash()
         };
       }
@@ -5829,14 +4862,14 @@
   var require_stackSet = __commonJS({
     "node_modules/lodash/_stackSet.js"(exports, module) {
       var ListCache = require_ListCache();
-      var Map = require_Map();
+      var Map2 = require_Map();
       var MapCache = require_MapCache();
       var LARGE_ARRAY_SIZE = 200;
       function stackSet(key, value) {
         var data = this.__data__;
         if (data instanceof ListCache) {
           var pairs = data.__data__;
-          if (!Map || pairs.length < LARGE_ARRAY_SIZE - 1) {
+          if (!Map2 || pairs.length < LARGE_ARRAY_SIZE - 1) {
             pairs.push([key, value]);
             this.size = ++data.size;
             return this;
@@ -5998,7 +5031,7 @@
   // node_modules/lodash/_Uint8Array.js
   var require_Uint8Array = __commonJS({
     "node_modules/lodash/_Uint8Array.js"(exports, module) {
-      var root = require_root2();
+      var root = require_root();
       var Uint8Array2 = root.Uint8Array;
       module.exports = Uint8Array2;
     }
@@ -6035,7 +5068,7 @@
   // node_modules/lodash/_equalByTag.js
   var require_equalByTag = __commonJS({
     "node_modules/lodash/_equalByTag.js"(exports, module) {
-      var Symbol2 = require_Symbol2();
+      var Symbol2 = require_Symbol();
       var Uint8Array2 = require_Uint8Array();
       var eq = require_eq();
       var equalArrays = require_equalArrays();
@@ -6203,21 +5236,11 @@
     }
   });
 
-  // node_modules/lodash/isObjectLike.js
-  var require_isObjectLike2 = __commonJS({
-    "node_modules/lodash/isObjectLike.js"(exports, module) {
-      function isObjectLike(value) {
-        return value != null && typeof value == "object";
-      }
-      module.exports = isObjectLike;
-    }
-  });
-
   // node_modules/lodash/_baseIsArguments.js
   var require_baseIsArguments = __commonJS({
     "node_modules/lodash/_baseIsArguments.js"(exports, module) {
-      var baseGetTag = require_baseGetTag2();
-      var isObjectLike = require_isObjectLike2();
+      var baseGetTag = require_baseGetTag();
+      var isObjectLike = require_isObjectLike();
       var argsTag = "[object Arguments]";
       function baseIsArguments(value) {
         return isObjectLike(value) && baseGetTag(value) == argsTag;
@@ -6230,7 +5253,7 @@
   var require_isArguments = __commonJS({
     "node_modules/lodash/isArguments.js"(exports, module) {
       var baseIsArguments = require_baseIsArguments();
-      var isObjectLike = require_isObjectLike2();
+      var isObjectLike = require_isObjectLike();
       var objectProto = Object.prototype;
       var hasOwnProperty = objectProto.hasOwnProperty;
       var propertyIsEnumerable = objectProto.propertyIsEnumerable;
@@ -6256,7 +5279,7 @@
   // node_modules/lodash/isBuffer.js
   var require_isBuffer = __commonJS({
     "node_modules/lodash/isBuffer.js"(exports, module) {
-      var root = require_root2();
+      var root = require_root();
       var stubFalse = require_stubFalse();
       var freeExports = typeof exports == "object" && exports && !exports.nodeType && exports;
       var freeModule = freeExports && typeof module == "object" && module && !module.nodeType && module;
@@ -6296,9 +5319,9 @@
   // node_modules/lodash/_baseIsTypedArray.js
   var require_baseIsTypedArray = __commonJS({
     "node_modules/lodash/_baseIsTypedArray.js"(exports, module) {
-      var baseGetTag = require_baseGetTag2();
+      var baseGetTag = require_baseGetTag();
       var isLength = require_isLength();
-      var isObjectLike = require_isObjectLike2();
+      var isObjectLike = require_isObjectLike();
       var argsTag = "[object Arguments]";
       var arrayTag = "[object Array]";
       var boolTag = "[object Boolean]";
@@ -6348,7 +5371,7 @@
   // node_modules/lodash/_nodeUtil.js
   var require_nodeUtil = __commonJS({
     "node_modules/lodash/_nodeUtil.js"(exports, module) {
-      var freeGlobal = require_freeGlobal2();
+      var freeGlobal = require_freeGlobal();
       var freeExports = typeof exports == "object" && exports && !exports.nodeType && exports;
       var freeModule = freeExports && typeof module == "object" && module && !module.nodeType && module;
       var moduleExports = freeModule && freeModule.exports === freeExports;
@@ -6419,22 +5442,10 @@
     }
   });
 
-  // node_modules/lodash/_overArg.js
-  var require_overArg2 = __commonJS({
-    "node_modules/lodash/_overArg.js"(exports, module) {
-      function overArg(func, transform) {
-        return function(arg) {
-          return func(transform(arg));
-        };
-      }
-      module.exports = overArg;
-    }
-  });
-
   // node_modules/lodash/_nativeKeys.js
   var require_nativeKeys = __commonJS({
     "node_modules/lodash/_nativeKeys.js"(exports, module) {
-      var overArg = require_overArg2();
+      var overArg = require_overArg();
       var nativeKeys = overArg(Object.keys, Object);
       module.exports = nativeKeys;
     }
@@ -6559,7 +5570,7 @@
   var require_DataView = __commonJS({
     "node_modules/lodash/_DataView.js"(exports, module) {
       var getNative = require_getNative();
-      var root = require_root2();
+      var root = require_root();
       var DataView = getNative(root, "DataView");
       module.exports = DataView;
     }
@@ -6569,7 +5580,7 @@
   var require_Promise = __commonJS({
     "node_modules/lodash/_Promise.js"(exports, module) {
       var getNative = require_getNative();
-      var root = require_root2();
+      var root = require_root();
       var Promise2 = getNative(root, "Promise");
       module.exports = Promise2;
     }
@@ -6579,7 +5590,7 @@
   var require_Set = __commonJS({
     "node_modules/lodash/_Set.js"(exports, module) {
       var getNative = require_getNative();
-      var root = require_root2();
+      var root = require_root();
       var Set = getNative(root, "Set");
       module.exports = Set;
     }
@@ -6589,7 +5600,7 @@
   var require_WeakMap = __commonJS({
     "node_modules/lodash/_WeakMap.js"(exports, module) {
       var getNative = require_getNative();
-      var root = require_root2();
+      var root = require_root();
       var WeakMap2 = getNative(root, "WeakMap");
       module.exports = WeakMap2;
     }
@@ -6599,11 +5610,11 @@
   var require_getTag = __commonJS({
     "node_modules/lodash/_getTag.js"(exports, module) {
       var DataView = require_DataView();
-      var Map = require_Map();
+      var Map2 = require_Map();
       var Promise2 = require_Promise();
       var Set = require_Set();
       var WeakMap2 = require_WeakMap();
-      var baseGetTag = require_baseGetTag2();
+      var baseGetTag = require_baseGetTag();
       var toSource = require_toSource();
       var mapTag = "[object Map]";
       var objectTag = "[object Object]";
@@ -6612,12 +5623,12 @@
       var weakMapTag = "[object WeakMap]";
       var dataViewTag = "[object DataView]";
       var dataViewCtorString = toSource(DataView);
-      var mapCtorString = toSource(Map);
+      var mapCtorString = toSource(Map2);
       var promiseCtorString = toSource(Promise2);
       var setCtorString = toSource(Set);
       var weakMapCtorString = toSource(WeakMap2);
       var getTag = baseGetTag;
-      if (DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag || Map && getTag(new Map()) != mapTag || Promise2 && getTag(Promise2.resolve()) != promiseTag || Set && getTag(new Set()) != setTag || WeakMap2 && getTag(new WeakMap2()) != weakMapTag) {
+      if (DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag || Map2 && getTag(new Map2()) != mapTag || Promise2 && getTag(Promise2.resolve()) != promiseTag || Set && getTag(new Set()) != setTag || WeakMap2 && getTag(new WeakMap2()) != weakMapTag) {
         getTag = function(value) {
           var result = baseGetTag(value), Ctor = result == objectTag ? value.constructor : void 0, ctorString = Ctor ? toSource(Ctor) : "";
           if (ctorString) {
@@ -6696,7 +5707,7 @@
   var require_baseIsEqual = __commonJS({
     "node_modules/lodash/_baseIsEqual.js"(exports, module) {
       var baseIsEqualDeep = require_baseIsEqualDeep();
-      var isObjectLike = require_isObjectLike2();
+      var isObjectLike = require_isObjectLike();
       function baseIsEqual(value, other, bitmask, customizer, stack) {
         if (value === other) {
           return true;
@@ -6817,8 +5828,8 @@
   // node_modules/lodash/isSymbol.js
   var require_isSymbol = __commonJS({
     "node_modules/lodash/isSymbol.js"(exports, module) {
-      var baseGetTag = require_baseGetTag2();
-      var isObjectLike = require_isObjectLike2();
+      var baseGetTag = require_baseGetTag();
+      var isObjectLike = require_isObjectLike();
       var symbolTag = "[object Symbol]";
       function isSymbol(value) {
         return typeof value == "symbol" || isObjectLike(value) && baseGetTag(value) == symbolTag;
@@ -6930,7 +5941,7 @@
   // node_modules/lodash/_baseToString.js
   var require_baseToString = __commonJS({
     "node_modules/lodash/_baseToString.js"(exports, module) {
-      var Symbol2 = require_Symbol2();
+      var Symbol2 = require_Symbol();
       var arrayMap = require_arrayMap();
       var isArray = require_isArray();
       var isSymbol = require_isSymbol();
@@ -7909,9 +6920,9 @@
     }
   });
 
-  // packages/systems/ix2/lottie/IX2LottieUtils.js
-  var require_IX2LottieUtils = __commonJS({
-    "packages/systems/ix2/lottie/IX2LottieUtils.js"(exports) {
+  // packages/systems/ix2/plugins/IX2Lottie.js
+  var require_IX2Lottie = __commonJS({
+    "packages/systems/ix2/plugins/IX2Lottie.js"(exports) {
       "use strict";
       Object.defineProperty(exports, "__esModule", {
         value: true
@@ -7967,6 +6978,136 @@
     }
   });
 
+  // packages/systems/ix2/plugins/IX2Spline.js
+  var require_IX2Spline = __commonJS({
+    "packages/systems/ix2/plugins/IX2Spline.js"(exports) {
+      "use strict";
+      Object.defineProperty(exports, "__esModule", {
+        value: true
+      });
+      exports.renderPlugin = exports.getPluginOrigin = exports.getPluginDuration = exports.getPluginDestination = exports.getPluginConfig = exports.createPluginInstance = exports.clearPlugin = void 0;
+      var queryContainerElement = (elementId) => document.querySelector(`[data-w-id="${elementId}"]`);
+      var getFrontendModule = () => window.Webflow.require("spline");
+      var difference = (arr1, arr2) => arr1.filter((x) => !arr2.includes(x));
+      var getPluginConfig = (actionItemConfig, key) => {
+        return actionItemConfig.value[key];
+      };
+      exports.getPluginConfig = getPluginConfig;
+      var getPluginDuration = () => {
+        return null;
+      };
+      exports.getPluginDuration = getPluginDuration;
+      var DEFAULT_VALUES = Object.freeze({
+        positionX: 0,
+        positionY: 0,
+        positionZ: 0,
+        rotationX: 0,
+        rotationY: 0,
+        rotationZ: 0,
+        scaleX: 1,
+        scaleY: 1,
+        scaleZ: 1
+      });
+      var getPluginOrigin = (refState, actionItem) => {
+        const destination = actionItem.config.value;
+        const destinationKeys = Object.keys(destination);
+        if (refState) {
+          const stateKeys = Object.keys(refState);
+          const diffKeys = difference(destinationKeys, stateKeys);
+          if (diffKeys.length) {
+            const origin2 = diffKeys.reduce((result, key) => {
+              result[key] = DEFAULT_VALUES[key];
+              return result;
+            }, refState);
+            return origin2;
+          }
+          return refState;
+        }
+        const origin = destinationKeys.reduce((result, key) => {
+          result[key] = DEFAULT_VALUES[key];
+          return result;
+        }, {});
+        return origin;
+      };
+      exports.getPluginOrigin = getPluginOrigin;
+      var getPluginDestination = (actionItemConfig) => {
+        return actionItemConfig.value;
+      };
+      exports.getPluginDestination = getPluginDestination;
+      var createPluginInstance = (element, actionItem) => {
+        var _actionItem$config, _actionItem$config$ta;
+        const pluginElementId = actionItem === null || actionItem === void 0 ? void 0 : (_actionItem$config = actionItem.config) === null || _actionItem$config === void 0 ? void 0 : (_actionItem$config$ta = _actionItem$config.target) === null || _actionItem$config$ta === void 0 ? void 0 : _actionItem$config$ta.pluginElement;
+        return pluginElementId ? queryContainerElement(pluginElementId) : null;
+      };
+      exports.createPluginInstance = createPluginInstance;
+      var renderPlugin = (containerElement, refState, actionItem) => {
+        const instance = getFrontendModule().getInstance(containerElement);
+        const objectId = actionItem.config.target.objectId;
+        if (!instance || !objectId) {
+          return;
+        }
+        const obj = instance.spline.findObjectById(objectId);
+        if (!obj) {
+          return;
+        }
+        const {
+          PLUGIN_SPLINE: props
+        } = refState;
+        if (props.positionX != null) {
+          obj.position.x = props.positionX;
+        }
+        if (props.positionY != null) {
+          obj.position.y = props.positionY;
+        }
+        if (props.positionZ != null) {
+          obj.position.z = props.positionZ;
+        }
+        if (props.rotationX != null) {
+          obj.rotation.x = props.rotationX;
+        }
+        if (props.rotationY != null) {
+          obj.rotation.y = props.rotationY;
+        }
+        if (props.rotationZ != null) {
+          obj.rotation.z = props.rotationZ;
+        }
+        if (props.scaleX != null) {
+          obj.scale.x = props.scaleX;
+        }
+        if (props.scaleY != null) {
+          obj.scale.y = props.scaleY;
+        }
+        if (props.scaleZ != null) {
+          obj.scale.z = props.scaleZ;
+        }
+      };
+      exports.renderPlugin = renderPlugin;
+      var clearPlugin = () => {
+        return null;
+      };
+      exports.clearPlugin = clearPlugin;
+    }
+  });
+
+  // packages/systems/ix2/plugins/index.js
+  var require_plugins = __commonJS({
+    "packages/systems/ix2/plugins/index.js"(exports) {
+      "use strict";
+      var _interopRequireWildcard = require_interopRequireWildcard().default;
+      var _interopRequireDefault = require_interopRequireDefault().default;
+      Object.defineProperty(exports, "__esModule", {
+        value: true
+      });
+      exports.pluginMethodMap = void 0;
+      var _extends2 = _interopRequireDefault(require_extends());
+      var _constants = require_constants();
+      var lottie = _interopRequireWildcard(require_IX2Lottie());
+      var spline = _interopRequireWildcard(require_IX2Spline());
+      var pluginMethodMap = /* @__PURE__ */ new Map([[_constants.ActionTypeConsts.PLUGIN_LOTTIE, (0, _extends2.default)({}, lottie)], [_constants.ActionTypeConsts.PLUGIN_SPLINE, (0, _extends2.default)({}, spline)]]);
+      exports.pluginMethodMap = pluginMethodMap;
+    }
+  });
+
   // packages/systems/ix2/shared/logic/IX2VanillaPlugins.js
   var require_IX2VanillaPlugins = __commonJS({
     "packages/systems/ix2/shared/logic/IX2VanillaPlugins.js"(exports) {
@@ -7977,28 +7118,16 @@
       exports.getPluginOrigin = exports.getPluginDuration = exports.getPluginDestination = exports.getPluginConfig = exports.createPluginInstance = exports.clearPlugin = void 0;
       exports.isPluginType = isPluginType;
       exports.renderPlugin = void 0;
-      var _IX2LottieUtils = require_IX2LottieUtils();
-      var _constants = require_constants();
       var _IX2BrowserSupport = require_IX2BrowserSupport();
-      var pluginMethodMap = {
-        [_constants.ActionTypeConsts.PLUGIN_LOTTIE]: {
-          getConfig: _IX2LottieUtils.getPluginConfig,
-          getOrigin: _IX2LottieUtils.getPluginOrigin,
-          getDuration: _IX2LottieUtils.getPluginDuration,
-          getDestination: _IX2LottieUtils.getPluginDestination,
-          createInstance: _IX2LottieUtils.createPluginInstance,
-          render: _IX2LottieUtils.renderPlugin,
-          clear: _IX2LottieUtils.clearPlugin
-        }
-      };
+      var _plugins = require_plugins();
       function isPluginType(actionTypeId) {
-        return actionTypeId === _constants.ActionTypeConsts.PLUGIN_LOTTIE;
+        return _plugins.pluginMethodMap.has(actionTypeId);
       }
       var pluginMethod = (methodName) => (actionTypeId) => {
         if (!_IX2BrowserSupport.IS_BROWSER_ENV) {
           return () => null;
         }
-        const plugin = pluginMethodMap[actionTypeId];
+        const plugin = _plugins.pluginMethodMap.get(actionTypeId);
         if (!plugin) {
           throw new Error(`IX2 no plugin configured for: ${actionTypeId}`);
         }
@@ -8008,19 +7137,19 @@
         }
         return method;
       };
-      var getPluginConfig = pluginMethod("getConfig");
+      var getPluginConfig = pluginMethod("getPluginConfig");
       exports.getPluginConfig = getPluginConfig;
-      var getPluginOrigin = pluginMethod("getOrigin");
+      var getPluginOrigin = pluginMethod("getPluginOrigin");
       exports.getPluginOrigin = getPluginOrigin;
-      var getPluginDuration = pluginMethod("getDuration");
+      var getPluginDuration = pluginMethod("getPluginDuration");
       exports.getPluginDuration = getPluginDuration;
-      var getPluginDestination = pluginMethod("getDestination");
+      var getPluginDestination = pluginMethod("getPluginDestination");
       exports.getPluginDestination = getPluginDestination;
-      var createPluginInstance = pluginMethod("createInstance");
+      var createPluginInstance = pluginMethod("createPluginInstance");
       exports.createPluginInstance = createPluginInstance;
-      var renderPlugin = pluginMethod("render");
+      var renderPlugin = pluginMethod("renderPlugin");
       exports.renderPlugin = renderPlugin;
-      var clearPlugin = pluginMethod("clear");
+      var clearPlugin = pluginMethod("clearPlugin");
       exports.clearPlugin = clearPlugin;
     }
   });
@@ -8239,6 +7368,7 @@
       });
       exports.cleanupHTMLElement = cleanupHTMLElement;
       exports.clearAllStyles = clearAllStyles;
+      exports.clearObjectCache = clearObjectCache;
       exports.getActionListProgress = getActionListProgress;
       exports.getAffectedElements = getAffectedElements;
       exports.getComputedStyle = getComputedStyle;
@@ -8320,9 +7450,9 @@
         STYLE_BACKGROUND_COLOR,
         STYLE_BORDER,
         STYLE_TEXT_COLOR,
-        GENERAL_DISPLAY
+        GENERAL_DISPLAY,
+        OBJECT_VALUE
       } = _constants.ActionTypeConsts;
-      var OBJECT_VALUE = "OBJECT_VALUE";
       var trim = (v) => v.trim();
       var colorStyleProps = Object.freeze({
         [STYLE_BACKGROUND_COLOR]: BACKGROUND_COLOR,
@@ -8339,7 +7469,10 @@
         [HEIGHT]: HEIGHT,
         [FONT_VARIATION_SETTINGS]: FONT_VARIATION_SETTINGS
       });
-      var objectCache = {};
+      var objectCache = /* @__PURE__ */ new Map();
+      function clearObjectCache() {
+        objectCache.clear();
+      }
       var instanceCount = 1;
       function getInstanceId() {
         return "i" + instanceCount++;
@@ -8494,7 +7627,7 @@
           useEventTarget
         } = normalizeTarget(target);
         if (objectId) {
-          const ref = objectCache[objectId] || (objectCache[objectId] = {});
+          const ref = objectCache.has(objectId) ? objectCache.get(objectId) : objectCache.set(objectId, {}).get(objectId);
           return [ref];
         }
         if (appliesTo === _constants.EventAppliesTo.PAGE) {
@@ -8595,7 +7728,7 @@
           actionTypeId
         } = actionItem;
         if ((0, _IX2VanillaPlugins.isPluginType)(actionTypeId)) {
-          return (0, _IX2VanillaPlugins.getPluginOrigin)(actionTypeId)(refState[actionTypeId]);
+          return (0, _IX2VanillaPlugins.getPluginOrigin)(actionTypeId)(refState[actionTypeId], actionItem);
         }
         switch (actionItem.actionTypeId) {
           case TRANSFORM_MOVE:
@@ -9353,6 +8486,9 @@
         if (typeof target === "string") {
           return target;
         }
+        if (target.pluginElement && target.objectId) {
+          return target.pluginElement + BAR_DELIMITER + target.objectId;
+        }
         const {
           id = "",
           selector = "",
@@ -9800,9 +8936,9 @@
   // node_modules/lodash/isString.js
   var require_isString = __commonJS({
     "node_modules/lodash/isString.js"(exports, module) {
-      var baseGetTag = require_baseGetTag2();
+      var baseGetTag = require_baseGetTag();
       var isArray = require_isArray();
-      var isObjectLike = require_isObjectLike2();
+      var isObjectLike = require_isObjectLike();
       var stringTag = "[object String]";
       function isString(value) {
         return typeof value == "string" || !isArray(value) && isObjectLike(value) && baseGetTag(value) == stringTag;
@@ -10047,20 +9183,11 @@
     }
   });
 
-  // node_modules/lodash/_getPrototype.js
-  var require_getPrototype2 = __commonJS({
-    "node_modules/lodash/_getPrototype.js"(exports, module) {
-      var overArg = require_overArg2();
-      var getPrototype = overArg(Object.getPrototypeOf, Object);
-      module.exports = getPrototype;
-    }
-  });
-
   // node_modules/lodash/_getSymbolsIn.js
   var require_getSymbolsIn = __commonJS({
     "node_modules/lodash/_getSymbolsIn.js"(exports, module) {
       var arrayPush = require_arrayPush();
-      var getPrototype = require_getPrototype2();
+      var getPrototype = require_getPrototype();
       var getSymbols = require_getSymbols();
       var stubArray = require_stubArray();
       var nativeGetSymbols = Object.getOwnPropertySymbols;
@@ -10281,7 +9408,7 @@
   // node_modules/lodash/now.js
   var require_now = __commonJS({
     "node_modules/lodash/now.js"(exports, module) {
-      var root = require_root2();
+      var root = require_root();
       var now = function() {
         return root.Date.now();
       };
@@ -10820,7 +9947,7 @@
   // node_modules/lodash/_isFlattenable.js
   var require_isFlattenable = __commonJS({
     "node_modules/lodash/_isFlattenable.js"(exports, module) {
-      var Symbol2 = require_Symbol2();
+      var Symbol2 = require_Symbol();
       var isArguments = require_isArguments();
       var isArray = require_isArray();
       var spreadableSymbol = Symbol2 ? Symbol2.isConcatSpreadable : void 0;
@@ -11114,7 +10241,7 @@
       var LodashWrapper = require_LodashWrapper();
       var baseLodash = require_baseLodash();
       var isArray = require_isArray();
-      var isObjectLike = require_isObjectLike2();
+      var isObjectLike = require_isObjectLike();
       var wrapperClone = require_wrapperClone();
       var objectProto = Object.prototype;
       var hasOwnProperty = objectProto.hasOwnProperty;
@@ -11966,6 +11093,7 @@
         getNamespacedParameterId,
         shouldAllowMediaQuery,
         cleanupHTMLElement,
+        clearObjectCache,
         stringifyTarget,
         mediaQueriesEqual,
         shallowEqual
@@ -12199,6 +11327,7 @@
             eventListeners
           } = ixSession;
           eventListeners.forEach(clearEventListener);
+          clearObjectCache();
           store.dispatch((0, _IX2EngineActions.sessionStopped)());
         }
       }
@@ -12959,11 +12088,8 @@
               refState
             } = ixElements[elementId] || {};
             const actionState = refState && refState[actionTypeId];
-            switch (refType) {
-              case HTML_ELEMENT: {
-                renderHTMLElement(ref, refState, actionState, eventId, actionItem, styleProp, elementApi, renderType, pluginInstance);
-                break;
-              }
+            if (refType === HTML_ELEMENT || isPluginType(actionTypeId)) {
+              renderHTMLElement(ref, refState, actionState, eventId, actionItem, styleProp, elementApi, renderType, pluginInstance);
             }
           }
           if (complete) {
@@ -13040,6 +12166,371 @@
       ix2.setEnv(Webflow.env);
       Webflow.define("ix2", module.exports = function() {
         return ix2;
+      });
+    }
+  });
+
+  // shared/render/plugins/BaseSiteModules/webflow-links.js
+  var require_webflow_links = __commonJS({
+    "shared/render/plugins/BaseSiteModules/webflow-links.js"(exports, module) {
+      var Webflow = require_webflow_lib();
+      Webflow.define("links", module.exports = function($, _) {
+        var api = {};
+        var $win = $(window);
+        var designer;
+        var inApp = Webflow.env();
+        var location = window.location;
+        var tempLink = document.createElement("a");
+        var linkCurrent = "w--current";
+        var indexPage = /index\.(html|php)$/;
+        var dirList = /\/$/;
+        var anchors;
+        var slug;
+        api.ready = api.design = api.preview = init;
+        function init() {
+          designer = inApp && Webflow.env("design");
+          slug = Webflow.env("slug") || location.pathname || "";
+          Webflow.scroll.off(scroll);
+          anchors = [];
+          var links = document.links;
+          for (var i = 0; i < links.length; ++i) {
+            select(links[i]);
+          }
+          if (anchors.length) {
+            Webflow.scroll.on(scroll);
+            scroll();
+          }
+        }
+        function select(link) {
+          var href = designer && link.getAttribute("href-disabled") || link.getAttribute("href");
+          tempLink.href = href;
+          if (href.indexOf(":") >= 0) {
+            return;
+          }
+          var $link = $(link);
+          if (tempLink.hash.length > 1 && tempLink.host + tempLink.pathname === location.host + location.pathname) {
+            if (!/^#[a-zA-Z0-9\-\_]+$/.test(tempLink.hash)) {
+              return;
+            }
+            var $section = $(tempLink.hash);
+            $section.length && anchors.push({
+              link: $link,
+              sec: $section,
+              active: false
+            });
+            return;
+          }
+          if (href === "#" || href === "") {
+            return;
+          }
+          var match = tempLink.href === location.href || href === slug || indexPage.test(href) && dirList.test(slug);
+          setClass($link, linkCurrent, match);
+        }
+        function scroll() {
+          var viewTop = $win.scrollTop();
+          var viewHeight = $win.height();
+          _.each(anchors, function(anchor) {
+            var $link = anchor.link;
+            var $section = anchor.sec;
+            var top = $section.offset().top;
+            var height = $section.outerHeight();
+            var offset = viewHeight * 0.5;
+            var active = $section.is(":visible") && top + height - offset >= viewTop && top + offset <= viewTop + viewHeight;
+            if (anchor.active === active) {
+              return;
+            }
+            anchor.active = active;
+            setClass($link, linkCurrent, active);
+          });
+        }
+        function setClass($elem, className, add) {
+          var exists = $elem.hasClass(className);
+          if (add && exists) {
+            return;
+          }
+          if (!add && !exists) {
+            return;
+          }
+          add ? $elem.addClass(className) : $elem.removeClass(className);
+        }
+        return api;
+      });
+    }
+  });
+
+  // shared/render/plugins/BaseSiteModules/webflow-scroll.js
+  var require_webflow_scroll = __commonJS({
+    "shared/render/plugins/BaseSiteModules/webflow-scroll.js"(exports, module) {
+      var Webflow = require_webflow_lib();
+      Webflow.define("scroll", module.exports = function($) {
+        var NS_EVENTS = {
+          WF_CLICK_EMPTY: "click.wf-empty-link",
+          WF_CLICK_SCROLL: "click.wf-scroll"
+        };
+        var loc = window.location;
+        var history = inIframe() ? null : window.history;
+        var $win = $(window);
+        var $doc = $(document);
+        var $body = $(document.body);
+        var animate = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || function(fn) {
+          window.setTimeout(fn, 15);
+        };
+        var rootTag = Webflow.env("editor") ? ".w-editor-body" : "body";
+        var headerSelector = "header, " + rootTag + " > .header, " + rootTag + " > .w-nav:not([data-no-scroll])";
+        var emptyHrefSelector = 'a[href="#"]';
+        var localHrefSelector = 'a[href*="#"]:not(.w-tab-link):not(' + emptyHrefSelector + ")";
+        var scrollTargetOutlineCSS = '.wf-force-outline-none[tabindex="-1"]:focus{outline:none;}';
+        var focusStylesEl = document.createElement("style");
+        focusStylesEl.appendChild(document.createTextNode(scrollTargetOutlineCSS));
+        function inIframe() {
+          try {
+            return Boolean(window.frameElement);
+          } catch (e) {
+            return true;
+          }
+        }
+        var validHash = /^#[a-zA-Z0-9][\w:.-]*$/;
+        function linksToCurrentPage(link) {
+          return validHash.test(link.hash) && link.host + link.pathname === loc.host + loc.pathname;
+        }
+        const reducedMotionMediaQuery = typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)");
+        function reducedMotionEnabled() {
+          return document.body.getAttribute("data-wf-scroll-motion") === "none" || reducedMotionMediaQuery.matches;
+        }
+        function setFocusable($el, action) {
+          var initialTabindex;
+          switch (action) {
+            case "add":
+              initialTabindex = $el.attr("tabindex");
+              if (initialTabindex) {
+                $el.attr("data-wf-tabindex-swap", initialTabindex);
+              } else {
+                $el.attr("tabindex", "-1");
+              }
+              break;
+            case "remove":
+              initialTabindex = $el.attr("data-wf-tabindex-swap");
+              if (initialTabindex) {
+                $el.attr("tabindex", initialTabindex);
+                $el.removeAttr("data-wf-tabindex-swap");
+              } else {
+                $el.removeAttr("tabindex");
+              }
+              break;
+          }
+          $el.toggleClass("wf-force-outline-none", action === "add");
+        }
+        function validateScroll(evt) {
+          var target = evt.currentTarget;
+          if (
+            // Bail if in Designer
+            Webflow.env("design") || // Ignore links being used by jQuery mobile
+            window.$.mobile && /(?:^|\s)ui-link(?:$|\s)/.test(target.className)
+          ) {
+            return;
+          }
+          var hash = linksToCurrentPage(target) ? target.hash : "";
+          if (hash === "")
+            return;
+          var $el = $(hash);
+          if (!$el.length) {
+            return;
+          }
+          if (evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+          }
+          updateHistory(hash, evt);
+          window.setTimeout(function() {
+            scroll($el, function setFocus() {
+              setFocusable($el, "add");
+              $el.get(0).focus({
+                preventScroll: true
+              });
+              setFocusable($el, "remove");
+            });
+          }, evt ? 0 : 300);
+        }
+        function updateHistory(hash) {
+          if (loc.hash !== hash && history && history.pushState && // Navigation breaks Chrome when the protocol is `file:`.
+          !(Webflow.env.chrome && loc.protocol === "file:")) {
+            var oldHash = history.state && history.state.hash;
+            if (oldHash !== hash) {
+              history.pushState({
+                hash
+              }, "", hash);
+            }
+          }
+        }
+        function scroll($targetEl, cb) {
+          var start = $win.scrollTop();
+          var end = calculateScrollEndPosition($targetEl);
+          if (start === end)
+            return;
+          var duration = calculateScrollDuration($targetEl, start, end);
+          var clock = Date.now();
+          var step = function() {
+            var elapsed = Date.now() - clock;
+            window.scroll(0, getY(start, end, elapsed, duration));
+            if (elapsed <= duration) {
+              animate(step);
+            } else if (typeof cb === "function") {
+              cb();
+            }
+          };
+          animate(step);
+        }
+        function calculateScrollEndPosition($targetEl) {
+          var $header = $(headerSelector);
+          var offsetY = $header.css("position") === "fixed" ? $header.outerHeight() : 0;
+          var end = $targetEl.offset().top - offsetY;
+          if ($targetEl.data("scroll") === "mid") {
+            var available = $win.height() - offsetY;
+            var elHeight = $targetEl.outerHeight();
+            if (elHeight < available) {
+              end -= Math.round((available - elHeight) / 2);
+            }
+          }
+          return end;
+        }
+        function calculateScrollDuration($targetEl, start, end) {
+          if (reducedMotionEnabled())
+            return 0;
+          var mult = 1;
+          $body.add($targetEl).each(function(_, el) {
+            var time = parseFloat(el.getAttribute("data-scroll-time"));
+            if (!isNaN(time) && time >= 0) {
+              mult = time;
+            }
+          });
+          return (472.143 * Math.log(Math.abs(start - end) + 125) - 2e3) * mult;
+        }
+        function getY(start, end, elapsed, duration) {
+          if (elapsed > duration) {
+            return end;
+          }
+          return start + (end - start) * ease(elapsed / duration);
+        }
+        function ease(t) {
+          return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+        }
+        function ready() {
+          var {
+            WF_CLICK_EMPTY,
+            WF_CLICK_SCROLL
+          } = NS_EVENTS;
+          $doc.on(WF_CLICK_SCROLL, localHrefSelector, validateScroll);
+          $doc.on(WF_CLICK_EMPTY, emptyHrefSelector, function(e) {
+            e.preventDefault();
+          });
+          document.head.insertBefore(focusStylesEl, document.head.firstChild);
+        }
+        return {
+          ready
+        };
+      });
+    }
+  });
+
+  // shared/render/plugins/BaseSiteModules/webflow-touch.js
+  var require_webflow_touch = __commonJS({
+    "shared/render/plugins/BaseSiteModules/webflow-touch.js"(exports, module) {
+      var Webflow = require_webflow_lib();
+      Webflow.define("touch", module.exports = function($) {
+        var api = {};
+        var getSelection = window.getSelection;
+        $.event.special.tap = {
+          bindType: "click",
+          delegateType: "click"
+        };
+        api.init = function(el) {
+          el = typeof el === "string" ? $(el).get(0) : el;
+          return el ? new Touch(el) : null;
+        };
+        function Touch(el) {
+          var active = false;
+          var useTouch = false;
+          var thresholdX = Math.min(Math.round(window.innerWidth * 0.04), 40);
+          var startX;
+          var lastX;
+          el.addEventListener("touchstart", start, false);
+          el.addEventListener("touchmove", move, false);
+          el.addEventListener("touchend", end, false);
+          el.addEventListener("touchcancel", cancel, false);
+          el.addEventListener("mousedown", start, false);
+          el.addEventListener("mousemove", move, false);
+          el.addEventListener("mouseup", end, false);
+          el.addEventListener("mouseout", cancel, false);
+          function start(evt) {
+            var touches = evt.touches;
+            if (touches && touches.length > 1) {
+              return;
+            }
+            active = true;
+            if (touches) {
+              useTouch = true;
+              startX = touches[0].clientX;
+            } else {
+              startX = evt.clientX;
+            }
+            lastX = startX;
+          }
+          function move(evt) {
+            if (!active) {
+              return;
+            }
+            if (useTouch && evt.type === "mousemove") {
+              evt.preventDefault();
+              evt.stopPropagation();
+              return;
+            }
+            var touches = evt.touches;
+            var x = touches ? touches[0].clientX : evt.clientX;
+            var velocityX = x - lastX;
+            lastX = x;
+            if (Math.abs(velocityX) > thresholdX && getSelection && String(getSelection()) === "") {
+              triggerEvent("swipe", evt, {
+                direction: velocityX > 0 ? "right" : "left"
+              });
+              cancel();
+            }
+          }
+          function end(evt) {
+            if (!active) {
+              return;
+            }
+            active = false;
+            if (useTouch && evt.type === "mouseup") {
+              evt.preventDefault();
+              evt.stopPropagation();
+              useTouch = false;
+              return;
+            }
+          }
+          function cancel() {
+            active = false;
+          }
+          function destroy() {
+            el.removeEventListener("touchstart", start, false);
+            el.removeEventListener("touchmove", move, false);
+            el.removeEventListener("touchend", end, false);
+            el.removeEventListener("touchcancel", cancel, false);
+            el.removeEventListener("mousedown", start, false);
+            el.removeEventListener("mousemove", move, false);
+            el.removeEventListener("mouseup", end, false);
+            el.removeEventListener("mouseout", cancel, false);
+            el = null;
+          }
+          this.destroy = destroy;
+        }
+        function triggerEvent(type, evt, data) {
+          var newEvent = $.Event(type, {
+            originalEvent: evt
+          });
+          $(evt.target).trigger(newEvent, data);
+        }
+        api.instance = api.init(document);
+        return api;
       });
     }
   });
@@ -13502,18 +12993,470 @@
     }
   });
 
+  // shared/render/plugins/Navbar/webflow-navbar.js
+  var require_webflow_navbar = __commonJS({
+    "shared/render/plugins/Navbar/webflow-navbar.js"(exports, module) {
+      var Webflow = require_webflow_lib();
+      var IXEvents = require_webflow_ix2_events();
+      var KEY_CODES = {
+        ARROW_LEFT: 37,
+        ARROW_UP: 38,
+        ARROW_RIGHT: 39,
+        ARROW_DOWN: 40,
+        ESCAPE: 27,
+        SPACE: 32,
+        ENTER: 13,
+        HOME: 36,
+        END: 35
+      };
+      Webflow.define("navbar", module.exports = function($, _) {
+        var api = {};
+        var tram = $.tram;
+        var $win = $(window);
+        var $doc = $(document);
+        var debounce = _.debounce;
+        var $body;
+        var $navbars;
+        var designer;
+        var inEditor;
+        var inApp = Webflow.env();
+        var overlay = '<div class="w-nav-overlay" data-wf-ignore />';
+        var namespace = ".w-nav";
+        var navbarOpenedButton = "w--open";
+        var navbarOpenedDropdown = "w--nav-dropdown-open";
+        var navbarOpenedDropdownToggle = "w--nav-dropdown-toggle-open";
+        var navbarOpenedDropdownList = "w--nav-dropdown-list-open";
+        var navbarOpenedLink = "w--nav-link-open";
+        var ix = IXEvents.triggers;
+        var menuSibling = $();
+        api.ready = api.design = api.preview = init;
+        api.destroy = function() {
+          menuSibling = $();
+          removeListeners();
+          if ($navbars && $navbars.length) {
+            $navbars.each(teardown);
+          }
+        };
+        function init() {
+          designer = inApp && Webflow.env("design");
+          inEditor = Webflow.env("editor");
+          $body = $(document.body);
+          $navbars = $doc.find(namespace);
+          if (!$navbars.length) {
+            return;
+          }
+          $navbars.each(build);
+          removeListeners();
+          addListeners();
+        }
+        function removeListeners() {
+          Webflow.resize.off(resizeAll);
+        }
+        function addListeners() {
+          Webflow.resize.on(resizeAll);
+        }
+        function resizeAll() {
+          $navbars.each(resize);
+        }
+        function build(i, el) {
+          var $el = $(el);
+          var data = $.data(el, namespace);
+          if (!data) {
+            data = $.data(el, namespace, {
+              open: false,
+              el: $el,
+              config: {},
+              selectedIdx: -1
+            });
+          }
+          data.menu = $el.find(".w-nav-menu");
+          data.links = data.menu.find(".w-nav-link");
+          data.dropdowns = data.menu.find(".w-dropdown");
+          data.dropdownToggle = data.menu.find(".w-dropdown-toggle");
+          data.dropdownList = data.menu.find(".w-dropdown-list");
+          data.button = $el.find(".w-nav-button");
+          data.container = $el.find(".w-container");
+          data.overlayContainerId = "w-nav-overlay-" + i;
+          data.outside = outside(data);
+          var navBrandLink = $el.find(".w-nav-brand");
+          if (navBrandLink && navBrandLink.attr("href") === "/" && navBrandLink.attr("aria-label") == null) {
+            navBrandLink.attr("aria-label", "home");
+          }
+          data.button.attr("style", "-webkit-user-select: text;");
+          if (data.button.attr("aria-label") == null) {
+            data.button.attr("aria-label", "menu");
+          }
+          data.button.attr("role", "button");
+          data.button.attr("tabindex", "0");
+          data.button.attr("aria-controls", data.overlayContainerId);
+          data.button.attr("aria-haspopup", "menu");
+          data.button.attr("aria-expanded", "false");
+          data.el.off(namespace);
+          data.button.off(namespace);
+          data.menu.off(namespace);
+          configure(data);
+          if (designer) {
+            removeOverlay(data);
+            data.el.on("setting" + namespace, handler(data));
+          } else {
+            addOverlay(data);
+            data.button.on("click" + namespace, toggle(data));
+            data.menu.on("click" + namespace, "a", navigate(data));
+            data.button.on("keydown" + namespace, makeToggleButtonKeyboardHandler(data));
+            data.el.on("keydown" + namespace, makeLinksKeyboardHandler(data));
+          }
+          resize(i, el);
+        }
+        function teardown(i, el) {
+          var data = $.data(el, namespace);
+          if (data) {
+            removeOverlay(data);
+            $.removeData(el, namespace);
+          }
+        }
+        function removeOverlay(data) {
+          if (!data.overlay) {
+            return;
+          }
+          close(data, true);
+          data.overlay.remove();
+          data.overlay = null;
+        }
+        function addOverlay(data) {
+          if (data.overlay) {
+            return;
+          }
+          data.overlay = $(overlay).appendTo(data.el);
+          data.overlay.attr("id", data.overlayContainerId);
+          data.parent = data.menu.parent();
+          close(data, true);
+        }
+        function configure(data) {
+          var config = {};
+          var old = data.config || {};
+          var animation = config.animation = data.el.attr("data-animation") || "default";
+          config.animOver = /^over/.test(animation);
+          config.animDirect = /left$/.test(animation) ? -1 : 1;
+          if (old.animation !== animation) {
+            data.open && _.defer(reopen, data);
+          }
+          config.easing = data.el.attr("data-easing") || "ease";
+          config.easing2 = data.el.attr("data-easing2") || "ease";
+          var duration = data.el.attr("data-duration");
+          config.duration = duration != null ? Number(duration) : 400;
+          config.docHeight = data.el.attr("data-doc-height");
+          data.config = config;
+        }
+        function handler(data) {
+          return function(evt, options) {
+            options = options || {};
+            var winWidth = $win.width();
+            configure(data);
+            options.open === true && open(data, true);
+            options.open === false && close(data, true);
+            data.open && _.defer(function() {
+              if (winWidth !== $win.width()) {
+                reopen(data);
+              }
+            });
+          };
+        }
+        function makeToggleButtonKeyboardHandler(data) {
+          return function(evt) {
+            switch (evt.keyCode) {
+              case KEY_CODES.SPACE:
+              case KEY_CODES.ENTER: {
+                toggle(data)();
+                evt.preventDefault();
+                return evt.stopPropagation();
+              }
+              case KEY_CODES.ESCAPE: {
+                close(data);
+                evt.preventDefault();
+                return evt.stopPropagation();
+              }
+              case KEY_CODES.ARROW_RIGHT:
+              case KEY_CODES.ARROW_DOWN:
+              case KEY_CODES.HOME:
+              case KEY_CODES.END: {
+                if (!data.open) {
+                  evt.preventDefault();
+                  return evt.stopPropagation();
+                }
+                if (evt.keyCode === KEY_CODES.END) {
+                  data.selectedIdx = data.links.length - 1;
+                } else {
+                  data.selectedIdx = 0;
+                }
+                focusSelectedLink(data);
+                evt.preventDefault();
+                return evt.stopPropagation();
+              }
+            }
+          };
+        }
+        function makeLinksKeyboardHandler(data) {
+          return function(evt) {
+            if (!data.open) {
+              return;
+            }
+            data.selectedIdx = data.links.index(document.activeElement);
+            switch (evt.keyCode) {
+              case KEY_CODES.HOME:
+              case KEY_CODES.END: {
+                if (evt.keyCode === KEY_CODES.END) {
+                  data.selectedIdx = data.links.length - 1;
+                } else {
+                  data.selectedIdx = 0;
+                }
+                focusSelectedLink(data);
+                evt.preventDefault();
+                return evt.stopPropagation();
+              }
+              case KEY_CODES.ESCAPE: {
+                close(data);
+                data.button.focus();
+                evt.preventDefault();
+                return evt.stopPropagation();
+              }
+              case KEY_CODES.ARROW_LEFT:
+              case KEY_CODES.ARROW_UP: {
+                data.selectedIdx = Math.max(-1, data.selectedIdx - 1);
+                focusSelectedLink(data);
+                evt.preventDefault();
+                return evt.stopPropagation();
+              }
+              case KEY_CODES.ARROW_RIGHT:
+              case KEY_CODES.ARROW_DOWN: {
+                data.selectedIdx = Math.min(data.links.length - 1, data.selectedIdx + 1);
+                focusSelectedLink(data);
+                evt.preventDefault();
+                return evt.stopPropagation();
+              }
+            }
+          };
+        }
+        function focusSelectedLink(data) {
+          if (data.links[data.selectedIdx]) {
+            var selectedElement = data.links[data.selectedIdx];
+            selectedElement.focus();
+            navigate(selectedElement);
+          }
+        }
+        function reopen(data) {
+          if (!data.open) {
+            return;
+          }
+          close(data, true);
+          open(data, true);
+        }
+        function toggle(data) {
+          return debounce(function() {
+            data.open ? close(data) : open(data);
+          });
+        }
+        function navigate(data) {
+          return function(evt) {
+            var link = $(this);
+            var href = link.attr("href");
+            if (!Webflow.validClick(evt.currentTarget)) {
+              evt.preventDefault();
+              return;
+            }
+            if (href && href.indexOf("#") === 0 && data.open) {
+              close(data);
+            }
+          };
+        }
+        function outside(data) {
+          if (data.outside) {
+            $doc.off("click" + namespace, data.outside);
+          }
+          return function(evt) {
+            var $target = $(evt.target);
+            if (inEditor && $target.closest(".w-editor-bem-EditorOverlay").length) {
+              return;
+            }
+            outsideDebounced(data, $target);
+          };
+        }
+        var outsideDebounced = debounce(function(data, $target) {
+          if (!data.open) {
+            return;
+          }
+          var menu = $target.closest(".w-nav-menu");
+          if (!data.menu.is(menu)) {
+            close(data);
+          }
+        });
+        function resize(i, el) {
+          var data = $.data(el, namespace);
+          var collapsed = data.collapsed = data.button.css("display") !== "none";
+          if (data.open && !collapsed && !designer) {
+            close(data, true);
+          }
+          if (data.container.length) {
+            var updateEachMax = updateMax(data);
+            data.links.each(updateEachMax);
+            data.dropdowns.each(updateEachMax);
+          }
+          if (data.open) {
+            setOverlayHeight(data);
+          }
+        }
+        var maxWidth = "max-width";
+        function updateMax(data) {
+          var containMax = data.container.css(maxWidth);
+          if (containMax === "none") {
+            containMax = "";
+          }
+          return function(i, link) {
+            link = $(link);
+            link.css(maxWidth, "");
+            if (link.css(maxWidth) === "none") {
+              link.css(maxWidth, containMax);
+            }
+          };
+        }
+        function addMenuOpen(i, el) {
+          el.setAttribute("data-nav-menu-open", "");
+        }
+        function removeMenuOpen(i, el) {
+          el.removeAttribute("data-nav-menu-open");
+        }
+        function open(data, immediate) {
+          if (data.open) {
+            return;
+          }
+          data.open = true;
+          data.menu.each(addMenuOpen);
+          data.links.addClass(navbarOpenedLink);
+          data.dropdowns.addClass(navbarOpenedDropdown);
+          data.dropdownToggle.addClass(navbarOpenedDropdownToggle);
+          data.dropdownList.addClass(navbarOpenedDropdownList);
+          data.button.addClass(navbarOpenedButton);
+          var config = data.config;
+          var animation = config.animation;
+          if (animation === "none" || !tram.support.transform || config.duration <= 0) {
+            immediate = true;
+          }
+          var bodyHeight = setOverlayHeight(data);
+          var menuHeight = data.menu.outerHeight(true);
+          var menuWidth = data.menu.outerWidth(true);
+          var navHeight = data.el.height();
+          var navbarEl = data.el[0];
+          resize(0, navbarEl);
+          ix.intro(0, navbarEl);
+          Webflow.redraw.up();
+          if (!designer) {
+            $doc.on("click" + namespace, data.outside);
+          }
+          if (immediate) {
+            complete();
+            return;
+          }
+          var transConfig = "transform " + config.duration + "ms " + config.easing;
+          if (data.overlay) {
+            menuSibling = data.menu.prev();
+            data.overlay.show().append(data.menu);
+          }
+          if (config.animOver) {
+            tram(data.menu).add(transConfig).set({
+              x: config.animDirect * menuWidth,
+              height: bodyHeight
+            }).start({
+              x: 0
+            }).then(complete);
+            data.overlay && data.overlay.width(menuWidth);
+            return;
+          }
+          var offsetY = navHeight + menuHeight;
+          tram(data.menu).add(transConfig).set({
+            y: -offsetY
+          }).start({
+            y: 0
+          }).then(complete);
+          function complete() {
+            data.button.attr("aria-expanded", "true");
+          }
+        }
+        function setOverlayHeight(data) {
+          var config = data.config;
+          var bodyHeight = config.docHeight ? $doc.height() : $body.height();
+          if (config.animOver) {
+            data.menu.height(bodyHeight);
+          } else if (data.el.css("position") !== "fixed") {
+            bodyHeight -= data.el.outerHeight(true);
+          }
+          data.overlay && data.overlay.height(bodyHeight);
+          return bodyHeight;
+        }
+        function close(data, immediate) {
+          if (!data.open) {
+            return;
+          }
+          data.open = false;
+          data.button.removeClass(navbarOpenedButton);
+          var config = data.config;
+          if (config.animation === "none" || !tram.support.transform || config.duration <= 0) {
+            immediate = true;
+          }
+          ix.outro(0, data.el[0]);
+          $doc.off("click" + namespace, data.outside);
+          if (immediate) {
+            tram(data.menu).stop();
+            complete();
+            return;
+          }
+          var transConfig = "transform " + config.duration + "ms " + config.easing2;
+          var menuHeight = data.menu.outerHeight(true);
+          var menuWidth = data.menu.outerWidth(true);
+          var navHeight = data.el.height();
+          if (config.animOver) {
+            tram(data.menu).add(transConfig).start({
+              x: menuWidth * config.animDirect
+            }).then(complete);
+            return;
+          }
+          var offsetY = navHeight + menuHeight;
+          tram(data.menu).add(transConfig).start({
+            y: -offsetY
+          }).then(complete);
+          function complete() {
+            data.menu.height("");
+            tram(data.menu).set({
+              x: 0,
+              y: 0
+            });
+            data.menu.each(removeMenuOpen);
+            data.links.removeClass(navbarOpenedLink);
+            data.dropdowns.removeClass(navbarOpenedDropdown);
+            data.dropdownToggle.removeClass(navbarOpenedDropdownToggle);
+            data.dropdownList.removeClass(navbarOpenedDropdownList);
+            if (data.overlay && data.overlay.children().length) {
+              menuSibling.length ? data.menu.insertAfter(menuSibling) : data.menu.prependTo(data.parent);
+              data.overlay.attr("style", "").hide();
+            }
+            data.el.triggerHandler("w-close");
+            data.button.attr("aria-expanded", "false");
+          }
+        }
+        return api;
+      });
+    }
+  });
+
   // <stdin>
-  require_webflow_scroll();
-  require_webflow_touch();
+  require_webflow_brand();
   require_webflow_focus_visible();
-  require_webflow_links();
   require_webflow_focus();
   require_webflow_ix2_events();
-  require_webflow_focus_within();
-  require_webflow_brand();
-  require_webflow_navbar();
   require_webflow_ix2();
+  require_webflow_links();
+  require_webflow_scroll();
+  require_webflow_touch();
   require_webflow_forms();
+  require_webflow_navbar();
 })();
 /*!
  * tram.js v0.8.2-global
