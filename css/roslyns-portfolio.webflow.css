@@ -1468,6 +1468,14 @@ img {
   max-width: 60%;
 }
 
+.image-79, .image-80, .image-81, .image-82 {
+  max-width: 70%;
+}
+
+.div-block-38 {
+  display: inline-block;
+}
+
 @media screen and (min-width: 1440px) {
   .preview-button-2:hover {
     background-color: #583152;
