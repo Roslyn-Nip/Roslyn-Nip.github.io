@@ -721,7 +721,7 @@ img {
   width: 100%;
   height: 100%;
   color: #f8f8f8;
-  object-fit: fill;
+  object-fit: contain;
   background-color: #f8f8f8;
   overflow: hidden;
 }
@@ -769,7 +769,7 @@ img {
 
 .div-block-6 {
   padding-top: 10%;
-  padding-left: 64%;
+  padding-left: 30%;
 }
 
 .heading-6 {
@@ -789,7 +789,7 @@ img {
 
 .div-block-7 {
   height: 16rem;
-  object-fit: contain;
+  object-fit: fill;
   padding-top: 0%;
   padding-left: 10%;
   overflow: visible;
@@ -797,7 +797,7 @@ img {
 
 .column-8 {
   object-fit: contain;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .article-specs {
@@ -964,7 +964,7 @@ img {
 
 .takeaways {
   margin-bottom: 0;
-  padding-bottom: 102px;
+  padding-bottom: 2%;
   position: relative;
 }
 
@@ -1305,6 +1305,7 @@ img {
   margin-bottom: 4%;
   padding-top: 0%;
   padding-bottom: 0%;
+  overflow: hidden;
 }
 
 .image-67 {
@@ -1490,6 +1491,100 @@ img {
   font-weight: 900;
 }
 
+.titile-block {
+  height: auto;
+  object-fit: fill;
+  padding-top: 0%;
+  padding-bottom: 0;
+  padding-left: 10%;
+  overflow: visible;
+}
+
+.columns-4 {
+  object-fit: contain;
+  overflow: hidden;
+}
+
+.quick-stack {
+  padding-left: 20%;
+  padding-right: 20%;
+}
+
+.image-83, .image-84 {
+  padding-top: 4%;
+}
+
+.div-block-39 {
+  padding-bottom: 6%;
+  padding-left: 20%;
+  padding-right: 20%;
+}
+
+.image-85 {
+  padding-top: 8%;
+}
+
+.image-86, .image-87 {
+  padding-top: 4%;
+}
+
+.image-88 {
+  max-width: 70%;
+}
+
+.columns-5 {
+  margin-bottom: 6%;
+  padding-top: 2%;
+  padding-left: 30%;
+  padding-right: 30%;
+}
+
+.image-89 {
+  max-width: 80%;
+  padding-left: 10%;
+}
+
+.image-90 {
+  max-width: 100%;
+  padding-left: 30%;
+  padding-right: 30%;
+}
+
+.div-block-40 {
+  padding-bottom: 2%;
+  padding-left: 30%;
+  padding-right: 30%;
+}
+
+.image-91 {
+  padding-top: 0%;
+}
+
+.image-92 {
+  padding-bottom: 4%;
+}
+
+.image-93 {
+  padding-bottom: 0%;
+}
+
+.image-94, .image-95 {
+  padding-top: 4%;
+}
+
+.div-block-41 {
+  margin-bottom: 6%;
+}
+
+.image-96 {
+  padding-top: 2%;
+}
+
+.div-block-42 {
+  padding-left: 24%;
+  padding-right: 24%;
+}
+
 @media screen and (min-width: 1440px) {
   .preview-button-2:hover {
     background-color: #583152;
@@ -1517,7 +1612,7 @@ img {
 
   .column-2 {
     object-fit: contain;
-    padding-top: 25px;
+    padding-top: 0;
     overflow: hidden;
   }
 
@@ -1731,6 +1826,11 @@ img {
   .heading-white-mobile {
     font-size: 32px;
     line-height: 42px;
+  }
+
+  .div-block-39 {
+    padding-left: 18%;
+    padding-right: 18%;
   }
 }
 
@@ -2248,6 +2348,10 @@ img {
     margin-top: 0;
     padding-left: 0;
     display: block;
+  }
+
+  .titile-block {
+    height: 8rem;
   }
 }
 
