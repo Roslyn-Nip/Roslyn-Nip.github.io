@@ -384,6 +384,8 @@ img {
 
 .body-large {
   margin-bottom: 10px;
+  padding-left: 0%;
+  padding-right: 25%;
   font-family: Gilroy, sans-serif;
   font-size: 18px;
   font-weight: 500;
@@ -402,7 +404,7 @@ img {
   font-size: 2px;
 }
 
-.delete-me {
+.div-bar {
   height: 2px;
   background-color: var(--light-brown);
   margin-top: 18px;
@@ -1156,6 +1158,7 @@ img {
 }
 
 .column-10 {
+  padding-top: 0;
   padding-left: 24px;
 }
 
@@ -1687,7 +1690,7 @@ img {
   margin-top: 0;
   margin-bottom: 0;
   margin-left: 0%;
-  padding: 0% 0 0;
+  padding: 0% 0 0 9px;
   font-family: Gilroy, sans-serif;
   font-size: 14px;
   font-weight: 600;
@@ -1751,7 +1754,7 @@ img {
   align-self: center;
   margin-left: 0;
   margin-right: 8px;
-  padding: 3% 5% 4% 2%;
+  padding: 4% 5% 4% 2%;
   display: flex;
 }
 
@@ -1816,6 +1819,15 @@ img {
   height: 26px;
 }
 
+.div-block-46 {
+  padding-top: 3%;
+}
+
+.div-block-47 {
+  padding-left: 15%;
+  padding-right: 15%;
+}
+
 @media screen and (min-width: 1440px) {
   .preview-button-2:hover {
     background-color: var(--purple);
@@ -1863,6 +1875,11 @@ img {
   .image-9 {
     padding-bottom: 8px;
     padding-left: 0;
+  }
+
+  .body-large {
+    padding-left: 0%;
+    padding-right: 0%;
   }
 
   .article-column {
@@ -2009,9 +2026,20 @@ img {
     margin-top: 6%;
   }
 
+  .column-10 {
+    padding-top: 4%;
+  }
+
   .image-62 {
     max-height: 100%;
     overflow: auto;
+  }
+
+  .column-14 {
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    display: flex;
   }
 
   .image-65 {
@@ -2087,21 +2115,39 @@ img {
   }
 
   .tag-text {
-    padding-right: 3px;
+    padding-left: 6%;
+    padding-right: 6%;
   }
 
   .tag {
     margin-bottom: 6px;
-    padding-right: 3%;
+    padding-left: 2%;
+    padding-right: 5%;
   }
 
   .about-container---mobile {
     margin-top: 6%;
+    display: block;
   }
 
   .tag---profile {
     margin-bottom: 6px;
     padding-right: 3%;
+  }
+
+  .image-110 {
+    object-fit: fill;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 16%;
+    padding-bottom: 115px;
+    text-decoration: none;
+    display: block;
+  }
+
+  .div-block-47 {
+    padding-left: 10%;
+    padding-right: 10%;
   }
 }
 
@@ -2140,6 +2186,10 @@ img {
     margin-left: 87px;
   }
 
+  .heading {
+    text-align: center;
+  }
+
   .article-pages {
     margin-top: -40px;
   }
@@ -2166,6 +2216,11 @@ img {
     padding-top: 0;
     padding-left: 0;
     overflow: visible;
+  }
+
+  .body-large {
+    padding-left: 15%;
+    padding-right: 15%;
   }
 
   .article-column {
@@ -2313,7 +2368,7 @@ img {
   }
 
   .container-5 {
-    padding-top: 12%;
+    padding-top: 5%;
     padding-left: 2%;
     padding-right: 2%;
   }
@@ -2388,6 +2443,10 @@ img {
   .image-106, .image-107, .image-108, .image-109 {
     width: 30px;
     height: 26px;
+  }
+
+  .image-110 {
+    padding-bottom: 10%;
   }
 }
 
@@ -2478,6 +2537,8 @@ img {
   }
 
   .body-large {
+    padding-left: 0%;
+    padding-right: 0%;
     font-size: 14px;
   }
 
@@ -2498,6 +2559,7 @@ img {
   }
 
   .column-6 {
+    flex-direction: column;
     justify-content: flex-start;
     padding-left: 0;
     padding-right: 2%;
@@ -2585,6 +2647,10 @@ img {
     overflow: visible;
   }
 
+  .landing-quote {
+    object-fit: fill;
+  }
+
   .article-section {
     padding-left: 4%;
     padding-right: 4%;
@@ -2650,6 +2716,10 @@ img {
     margin-top: 10%;
   }
 
+  .column-10 {
+    padding-top: 10%;
+  }
+
   .div-20 {
     height: 20%;
     padding-bottom: 0%;
@@ -2662,6 +2732,11 @@ img {
   .container-5 {
     height: 0%;
     padding-top: 0%;
+  }
+
+  .div-block-26 {
+    flex-direction: column;
+    margin-top: 0;
   }
 
   .div-block-27 {
@@ -2736,6 +2811,19 @@ img {
     height: 19px;
     margin-top: 6px;
     padding-top: 0;
+  }
+
+  .tag---profile {
+    align-self: flex-start;
+  }
+
+  .image-110 {
+    padding-bottom: 10%;
+  }
+
+  .div-block-47 {
+    padding-left: 15%;
+    padding-right: 15%;
   }
 }
 
