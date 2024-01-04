@@ -808,6 +808,7 @@ img {
   object-fit: fill;
   flex-direction: row;
   margin-top: 4px;
+  padding-bottom: 4px;
   font-family: Gilroy, sans-serif;
   font-size: 20px;
   font-weight: 700;
@@ -2207,7 +2208,7 @@ img {
 
 .h6-div {
   margin-top: 2%;
-  padding-bottom: 1%;
+  padding-bottom: 2px;
 }
 
 .image-126 {
@@ -2239,7 +2240,49 @@ img {
 }
 
 .image-131 {
-  overflow: hidden;
+  min-width: 100%;
+  overflow: visible;
+}
+
+.link-block-5, .link-block-6 {
+  color: var(--purple);
+}
+
+.image-132 {
+  min-width: 100%;
+  overflow: visible;
+}
+
+.image-133 {
+  min-width: 50%;
+  align-self: center;
+}
+
+.image-134, .image-135, .image-136, .image-137 {
+  min-width: 100%;
+}
+
+.link-block-7, .link-block-8 {
+  color: var(--purple);
+}
+
+.image-138 {
+  min-width: 100%;
+}
+
+.div-block-64 {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  display: flex;
+}
+
+.div-block-65 {
+  padding-left: 4%;
+}
+
+.image-139 {
+  min-width: 100%;
 }
 
 @media screen and (min-width: 1440px) {
