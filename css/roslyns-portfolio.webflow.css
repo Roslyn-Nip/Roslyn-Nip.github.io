@@ -1003,7 +1003,7 @@ img {
 
 .div-line {
   border-bottom: 2px solid var(--light-brown);
-  margin: 2% 16%;
+  margin: 0% 16% 2%;
 }
 
 .kazoo-intro-section {
@@ -1022,7 +1022,7 @@ img {
   text-align: right;
 }
 
-.takeaways {
+.back-to-top {
   margin-bottom: 0;
   padding-bottom: 2%;
   position: relative;
@@ -1156,6 +1156,7 @@ img {
 }
 
 .image-54 {
+  min-width: 100%;
   padding-top: 0;
   padding-bottom: 0;
 }
@@ -2175,7 +2176,7 @@ img {
 
 .columns-7 {
   border-bottom: 0px solid var(--rosy-brown);
-  margin-bottom: 0%;
+  margin-bottom: 2%;
 }
 
 .header-div {
@@ -2240,8 +2241,10 @@ img {
 }
 
 .image-131 {
+  max-width: 120%;
   min-width: 100%;
-  overflow: visible;
+  object-fit: fill;
+  overflow: hidden;
 }
 
 .link-block-5, .link-block-6 {
@@ -2281,7 +2284,20 @@ img {
   padding-left: 4%;
 }
 
-.image-139 {
+.image-139, .image-140 {
+  min-width: 100%;
+}
+
+.column-20 {
+  padding-left: 0;
+}
+
+.link {
+  color: var(--purple);
+  font-weight: 700;
+}
+
+.image-141, .image-142, .image-143, .image-144, .image-145 {
   min-width: 100%;
 }
 
