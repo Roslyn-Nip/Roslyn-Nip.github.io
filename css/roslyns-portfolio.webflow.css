@@ -2073,7 +2073,12 @@ img {
   padding-top: 4%;
 }
 
-.image-114, .image-115 {
+.image-114 {
+  min-width: 100%;
+  overflow: visible;
+}
+
+.image-115 {
   overflow: visible;
 }
 
@@ -2109,7 +2114,12 @@ img {
   padding-right: 16%;
 }
 
-.image-117, .image-118 {
+.image-117 {
+  min-width: 100%;
+  overflow: visible;
+}
+
+.image-118 {
   overflow: visible;
 }
 
@@ -2386,6 +2396,10 @@ img {
 
 .image-159 {
   padding-right: 4%;
+}
+
+.image-160, .image-161 {
+  min-width: 100%;
 }
 
 @media screen and (min-width: 1440px) {
