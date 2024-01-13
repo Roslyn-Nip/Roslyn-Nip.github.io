@@ -143,7 +143,7 @@ img {
 
 .body {
   background-color: var(--white);
-  margin-bottom: 54px;
+  margin-bottom: 0%;
 }
 
 .nav-link {
@@ -464,8 +464,10 @@ img {
 }
 
 .section-2 {
-  max-height: 12%;
+  max-height: 100%;
   max-width: 100%;
+  margin-bottom: 0%;
+  padding-bottom: 0%;
   position: absolute;
   top: 0%;
   bottom: auto;
@@ -1372,6 +1374,7 @@ img {
 }
 
 .image-65 {
+  min-width: 100%;
   padding: 5% 3% 0% 10%;
   display: block;
   overflow: visible;
@@ -2395,11 +2398,17 @@ img {
 }
 
 .image-159 {
+  min-width: 100%;
   padding-right: 4%;
 }
 
 .image-160, .image-161, .image-162, .html-embed-2 {
   min-width: 100%;
+}
+
+.section-10 {
+  max-height: 10%;
+  max-width: 100%;
 }
 
 @media screen and (min-width: 1440px) {
