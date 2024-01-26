@@ -2421,6 +2421,10 @@ img {
   display: flex;
 }
 
+.image-165, .image-166, .image-167 {
+  min-width: 100%;
+}
+
 @media screen and (min-width: 1440px) {
   .preview-button-2:hover {
     background-color: var(--purple);
