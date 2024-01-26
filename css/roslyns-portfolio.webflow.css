@@ -2416,6 +2416,11 @@ img {
   min-width: 100%;
 }
 
+.html-embed-3 {
+  justify-content: center;
+  display: flex;
+}
+
 @media screen and (min-width: 1440px) {
   .preview-button-2:hover {
     background-color: var(--purple);
