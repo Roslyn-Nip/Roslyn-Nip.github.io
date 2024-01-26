@@ -2393,6 +2393,7 @@ img {
 }
 
 .image-158 {
+  min-width: 100%;
   padding-top: 2%;
   padding-left: 2%;
 }
@@ -2409,6 +2410,10 @@ img {
 .section-10 {
   max-height: 10%;
   max-width: 100%;
+}
+
+.image-163, .image-164 {
+  min-width: 100%;
 }
 
 @media screen and (min-width: 1440px) {
