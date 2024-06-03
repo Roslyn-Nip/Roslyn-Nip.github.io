@@ -737,7 +737,7 @@ img {
   text-align: center;
   flex-direction: column;
   align-items: center;
-  width: 260px;
+  width: 300px;
   padding-left: 0;
   display: flex;
 }
@@ -851,10 +851,13 @@ img {
 
 .div-block-7 {
   object-fit: fill;
+  justify-content: center;
+  align-items: center;
   min-width: 100%;
   height: 16rem;
   padding-top: 0%;
   padding-left: 0%;
+  display: flex;
   overflow: visible;
 }
 
@@ -1403,6 +1406,10 @@ img {
   overflow: visible;
 }
 
+.image-65:hover {
+  min-width: 95%;
+}
+
 .div-block-31 {
   display: inline-block;
 }
@@ -1828,7 +1835,7 @@ img {
   margin-bottom: 2%;
   margin-left: 0;
   margin-right: 8px;
-  padding: 1% 4%;
+  padding: 1% 4% 1% 3%;
   display: flex;
 }
 
@@ -2119,9 +2126,17 @@ img {
   overflow: visible;
 }
 
+.image-114:hover {
+  min-width: 95%;
+}
+
 .image-115 {
   max-width: 100%;
   overflow: visible;
+}
+
+.image-115:hover {
+  max-width: 95%;
 }
 
 .image-116 {
@@ -2395,7 +2410,7 @@ img {
 
 .image-7-copy:hover {
   object-fit: scale-down;
-  max-width: 90%;
+  max-width: 95%;
   position: static;
 }
 
@@ -2449,12 +2464,16 @@ img {
 }
 
 .section-10 {
+  vertical-align: baseline;
   max-width: 100%;
   max-height: 10%;
   margin-bottom: 0%;
-  margin-left: 20%;
-  margin-right: 20%;
+  margin-left: 0%;
+  margin-right: 0%;
   padding-bottom: 2%;
+  padding-left: 20%;
+  padding-right: 20%;
+  display: block;
 }
 
 .image-163, .image-164 {
@@ -2641,6 +2660,40 @@ img {
   display: flex;
 }
 
+.illustration-columns {
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.solaris-article-title {
+  background-color: #485728;
+}
+
+.solaris-images {
+  max-width: 100%;
+  padding-top: 2%;
+}
+
+.solaris-img-container {
+  padding-top: 2%;
+}
+
+.link-block-10 {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.solaris-cover-img {
+  padding-top: 2%;
+}
+
+.solaris-cover-img:hover {
+  max-width: 55%;
+}
+
 @media screen and (min-width: 1440px) {
   .preview-button-2:hover {
     background-color: var(--purple);
@@ -2672,6 +2725,7 @@ img {
 
   .column-2 {
     object-fit: contain;
+    max-height: 240px;
     padding-top: 0;
     overflow: hidden;
   }
@@ -2851,6 +2905,10 @@ img {
   .div-block-26 {
     object-fit: fill;
     flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding-left: 0%;
+    padding-right: 0%;
     position: static;
   }
 
@@ -2959,6 +3017,20 @@ img {
     padding-right: 8%;
   }
 
+  .job-tag-div {
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    flex-flow: row;
+    grid-template-rows: auto auto;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-columns: 1fr;
+    justify-content: center;
+    align-items: center;
+    padding-left: 10%;
+    padding-right: 10%;
+    display: flex;
+  }
+
   .image-110 {
     object-fit: fill;
     margin-left: auto;
@@ -3038,12 +3110,27 @@ img {
     display: flex;
   }
 
+  .section-10 {
+    margin-left: 4%;
+    margin-right: 4%;
+    padding-left: 0%;
+    padding-right: 0%;
+  }
+
   .grid {
     grid-auto-flow: row;
   }
 
   .introblurb {
     padding-top: 52px;
+  }
+
+  .columns-9 {
+    display: flex;
+  }
+
+  .link-block-9, .image-174 {
+    max-width: 100%;
   }
 }
 
@@ -3285,6 +3372,11 @@ img {
     padding-right: 2%;
   }
 
+  .div-block-26 {
+    justify-content: center;
+    align-items: center;
+  }
+
   .image-62 {
     position: static;
   }
@@ -3336,6 +3428,10 @@ img {
     padding-top: 14%;
   }
 
+  .tag {
+    padding-right: 3%;
+  }
+
   .image-99 {
     height: 18px;
     margin-top: 3px;
@@ -3344,6 +3440,10 @@ img {
   .about-container---mobile {
     padding-left: 20px;
     padding-right: 20px;
+  }
+
+  .job-tag-div {
+    display: block;
   }
 
   .image-104 {
@@ -3417,6 +3517,19 @@ img {
 
   .marquee-wrapper {
     font-size: .7em;
+  }
+
+  .columns-8, .columns-9 {
+    display: block;
+  }
+
+  .image-174 {
+    min-width: 30px;
+    max-width: 40%;
+  }
+
+  .solaris-article-title {
+    background-color: #485728;
   }
 }
 
@@ -3628,6 +3741,7 @@ img {
 
   .div-block-7 {
     height: 8rem;
+    overflow: hidden;
   }
 
   .column-8 {
@@ -3819,7 +3933,7 @@ img {
 
   .tag {
     margin-right: 8px;
-    padding-right: 8%;
+    padding-right: 3%;
   }
 
   .image-99 {
@@ -3831,6 +3945,10 @@ img {
 
   .tag---profile {
     align-self: flex-start;
+  }
+
+  .job-tag-div {
+    display: block;
   }
 
   .image-110 {
@@ -3953,6 +4071,19 @@ img {
 
   .div-block-67 {
     padding-top: 16px;
+  }
+
+  .columns-8, .columns-9 {
+    display: block;
+  }
+
+  .image-175 {
+    overflow: visible;
+  }
+
+  .image-176 {
+    vertical-align: baseline;
+    max-width: 40%;
   }
 }
 
