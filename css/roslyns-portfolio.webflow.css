@@ -1804,7 +1804,7 @@ img {
   margin-top: 0;
   margin-bottom: 0;
   margin-left: 0%;
-  padding: 2%;
+  padding: 2% 2% 2% 3%;
   font-family: Gilroy, sans-serif;
   font-size: 14px;
   font-weight: 600;
@@ -1884,6 +1884,7 @@ img {
   min-height: 34px;
   max-height: 386%;
   padding-top: 5px;
+  padding-right: 3%;
 }
 
 .image-101 {
