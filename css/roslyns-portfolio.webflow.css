@@ -2694,6 +2694,10 @@ img {
   max-width: 55%;
 }
 
+.front-page-img {
+  max-width: 100%;
+}
+
 @media screen and (min-width: 1440px) {
   .preview-button-2:hover {
     background-color: var(--purple);
