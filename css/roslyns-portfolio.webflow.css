@@ -33,7 +33,7 @@ body {
 img {
   object-fit: fill;
   min-width: 10px;
-  max-width: 60%;
+  max-width: 80%;
   padding-top: 0;
   padding-left: 0;
   display: inline-block;
@@ -1411,7 +1411,7 @@ img {
 }
 
 .div-block-31 {
-  display: inline-block;
+  display: flex;
 }
 
 .image-66 {
@@ -2041,6 +2041,8 @@ img {
 
 .book-design-header---desktop {
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
   padding-left: 5%;
   padding-right: 5%;
   display: flex;
@@ -2149,6 +2151,7 @@ img {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  max-width: 100%;
   padding-top: 12px;
   padding-bottom: 12px;
   display: flex;
@@ -2669,7 +2672,7 @@ img {
 }
 
 .solaris-article-title {
-  background-color: #485728;
+  background-color: #bc5454;
 }
 
 .solaris-images {
@@ -2697,6 +2700,46 @@ img {
 
 .front-page-img {
   max-width: 100%;
+}
+
+.link-2 {
+  color: var(--purple);
+}
+
+.graphic-design-images-display {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding-left: 5%;
+  padding-right: 5%;
+  display: flex;
+}
+
+.image-177 {
+  max-width: 70%;
+}
+
+.image-180 {
+  display: block;
+}
+
+.image-181 {
+  max-width: 50100%;
+  margin-left: 90px;
+  padding-top: 0;
+  overflow: visible;
+}
+
+.image-181:hover {
+  max-width: 90%;
+}
+
+.sunny-s-cover-img {
+  padding-top: 2%;
+}
+
+.sunny-s-cover-img:hover {
+  max-width: 75%;
 }
 
 @media screen and (min-width: 1440px) {
@@ -3070,6 +3113,10 @@ img {
     padding-left: 25%;
   }
 
+  .gallery-img-2 {
+    max-width: 100%;
+  }
+
   .column-8-copy {
     padding-left: 0;
   }
@@ -3118,6 +3165,7 @@ img {
   .section-10 {
     margin-left: 4%;
     margin-right: 4%;
+    padding-bottom: 12%;
     padding-left: 0%;
     padding-right: 0%;
   }
@@ -3136,6 +3184,34 @@ img {
 
   .link-block-9, .image-174 {
     max-width: 100%;
+  }
+
+  .solaris-article-title {
+    background-color: #425122;
+  }
+
+  .graphic-design-images-display {
+    padding-bottom: 0%;
+  }
+
+  .image-177 {
+    max-width: 100%;
+  }
+
+  .div-block-70 {
+    padding-bottom: 4%;
+  }
+
+  .image-178, .image-179 {
+    max-width: 100%;
+  }
+
+  .image-181 {
+    margin-left: 9%;
+  }
+
+  .sunny-s-cover-img {
+    padding-top: 2%;
   }
 }
 
@@ -3180,6 +3256,7 @@ img {
 
   .article-pages {
     margin-top: -40px;
+    margin-bottom: 10%;
   }
 
   .column-2 {
@@ -3273,6 +3350,10 @@ img {
     top: 109%;
     left: 31%;
     overflow: visible;
+  }
+
+  .div-block-3 {
+    margin-bottom: 188%;
   }
 
   .image-36 {
@@ -3511,6 +3592,10 @@ img {
     align-items: flex-start;
   }
 
+  .section-10 {
+    padding-bottom: 26%;
+  }
+
   .grid {
     grid-template-columns: 1fr 1fr 1fr;
     grid-auto-flow: row;
@@ -3534,7 +3619,15 @@ img {
   }
 
   .solaris-article-title {
-    background-color: #485728;
+    background-color: #bc5454;
+  }
+
+  .graphic-design-images-display {
+    flex-direction: row;
+  }
+
+  .image-181 {
+    margin-left: 10%;
   }
 }
 
@@ -3705,6 +3798,10 @@ img {
   .image-34 {
     width: 4%;
     left: 19%;
+  }
+
+  .div-block-3 {
+    margin-bottom: 153%;
   }
 
   .image-36 {
@@ -4053,6 +4150,11 @@ img {
     max-height: 100%;
   }
 
+  .section-10 {
+    margin-bottom: auto;
+    padding-bottom: 25%;
+  }
+
   .heading-1 {
     font-size: 40px;
   }
@@ -4082,6 +4184,10 @@ img {
     display: block;
   }
 
+  .solaris-article-title {
+    background-color: #425122;
+  }
+
   .image-175 {
     overflow: visible;
   }
@@ -4089,6 +4195,22 @@ img {
   .image-176 {
     vertical-align: baseline;
     max-width: 40%;
+  }
+
+  .div-block-69 {
+    padding-bottom: 69px;
+  }
+
+  .sunny-s-article-title {
+    background-color: #bb5454;
+  }
+
+  .image-181 {
+    margin-left: 2%;
+  }
+
+  .image-181:hover {
+    max-width: 100%;
   }
 }
 
