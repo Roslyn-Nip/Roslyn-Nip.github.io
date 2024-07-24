@@ -1553,7 +1553,7 @@ img {
 }
 
 .heading-6-white {
-  color: var(--white);
+  color: var(--purple);
   margin-top: 4px;
   font-family: Gilroy, sans-serif;
   font-size: 20px;
@@ -2200,16 +2200,7 @@ img {
   overflow: visible;
 }
 
-.heading-white---mobile {
-  color: var(--white);
-  text-align: left;
-  text-transform: uppercase;
-  margin-top: 10px;
-  font-family: Rubik, sans-serif;
-  font-weight: 900;
-}
-
-.heading-purple---mobile {
+.heading-white---mobile, .heading-purple---mobile {
   color: var(--purple);
   text-align: left;
   text-transform: uppercase;
@@ -2672,7 +2663,7 @@ img {
 }
 
 .solaris-article-title {
-  background-color: #bc5454;
+  background-color: var(--white);
 }
 
 .solaris-images {
