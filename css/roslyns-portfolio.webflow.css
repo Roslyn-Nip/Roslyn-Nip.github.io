@@ -746,7 +746,7 @@ img {
   display: flex;
 }
 
-.nav-deselected {
+.nav-links {
   color: var(--darker-grey);
   font-family: Inter, sans-serif;
   font-size: 24px;
@@ -756,12 +756,8 @@ img {
   top: 0;
 }
 
-.nav-deselected:hover {
+.nav-links:hover, .nav-links.w--current {
   color: var(--purple);
-}
-
-.nav-deselected.w--current {
-  color: var(--rosy-brown);
 }
 
 .div-block-5 {
@@ -2954,7 +2950,7 @@ img {
     left: 456px;
   }
 
-  .nav-deselected {
+  .nav-links {
     font-size: 20px;
   }
 
