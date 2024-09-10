@@ -6,8 +6,8 @@
   --black: #303030;
   --darker-grey: #999;
   --light-brown: #dedede;
-  --grey: var(--rosy-brown);
   --yellow: #ebaa4f;
+  --grey: var(--rosy-brown);
 }
 
 .w-layout-layout {
@@ -2790,7 +2790,7 @@ img {
 }
 
 .div-bar-2 {
-  background-color: var(--grey);
+  background-color: var(--light-brown);
   height: 2px;
   margin-top: 18px;
   margin-bottom: 5%;
