@@ -280,7 +280,7 @@ img {
   margin-left: 7%;
   padding-left: 4%;
   padding-right: 10%;
-  font-family: Syne, sans-serif;
+  font-family: Bricolage Grotesque, sans-serif;
   font-size: 24px;
   font-weight: 500;
   line-height: 28px;
@@ -381,7 +381,7 @@ img {
   color: var(--black);
   text-transform: none;
   margin-bottom: 0;
-  font-family: Inter, sans-serif;
+  font-family: Bricolage Grotesque, sans-serif;
   font-size: 30px;
   font-weight: 800;
   line-height: 100%;
@@ -390,7 +390,7 @@ img {
 .heading-3 {
   color: var(--purple);
   text-align: center;
-  font-family: Inter, sans-serif;
+  font-family: Bricolage Grotesque, sans-serif;
   font-size: 20px;
   font-weight: 700;
   text-decoration: none;
@@ -401,7 +401,7 @@ img {
 .heading-4 {
   color: var(--black);
   margin-bottom: 1rem;
-  font-family: Inter, sans-serif;
+  font-family: Bricolage Grotesque, sans-serif;
   font-size: 20px;
   font-weight: 400;
   line-height: 22px;
@@ -825,7 +825,7 @@ img {
   flex-direction: row;
   margin-top: 4px;
   padding-bottom: 4px;
-  font-family: Inter, sans-serif;
+  font-family: Bricolage Grotesque, sans-serif;
   font-size: 20px;
   font-weight: 600;
   line-height: 24px;
@@ -889,7 +889,7 @@ img {
 
 .body-reg {
   margin-bottom: 4%;
-  font-family: Inter, sans-serif;
+  font-family: Open Sans, sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
@@ -914,7 +914,7 @@ img {
 
 .heading-7 {
   color: var(--purple);
-  font-family: Inter, sans-serif;
+  font-family: Bricolage Grotesque, sans-serif;
   font-size: 32px;
   font-weight: 800;
 }
@@ -937,7 +937,7 @@ img {
 .body-small {
   white-space: normal;
   margin-top: 4px;
-  font-family: Inter, sans-serif;
+  font-family: Open Sans, sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
@@ -1494,7 +1494,7 @@ img {
   color: #583152;
   text-align: right;
   justify-content: flex-end;
-  font-family: Syne, sans-serif;
+  font-family: Bricolage Grotesque, sans-serif;
   font-size: 18px;
   font-weight: 500;
   display: flex;
@@ -1545,14 +1545,14 @@ img {
   text-align: left;
   text-transform: uppercase;
   margin-top: 10px;
-  font-family: Inter, sans-serif;
+  font-family: Bricolage Grotesque, sans-serif;
   font-weight: 900;
 }
 
 .heading-6-white {
   color: var(--white);
   margin-top: 4px;
-  font-family: Syne, sans-serif;
+  font-family: Bricolage Grotesque, sans-serif;
   font-size: 20px;
   font-weight: 500;
   line-height: 24px;
@@ -1972,7 +1972,7 @@ img {
 .div-block-51 {
   justify-content: center;
   align-items: center;
-  padding-bottom: 1rem;
+  padding-bottom: 2rem;
   display: flex;
 }
 
@@ -2062,7 +2062,7 @@ img {
 .body-reg-purple {
   color: var(--black);
   margin-bottom: 0%;
-  font-family: Inter, sans-serif;
+  font-family: Open Sans, sans-serif;
   font-size: 16px;
   font-weight: 500;
   line-height: 24px;
@@ -2209,7 +2209,7 @@ img {
   text-align: left;
   text-transform: uppercase;
   margin-top: 10px;
-  font-family: Inter, sans-serif;
+  font-family: Bricolage Grotesque, sans-serif;
   font-weight: 900;
 }
 
@@ -2778,7 +2778,7 @@ img {
   justify-content: center;
   align-items: flex-start;
   margin-left: 0;
-  font-family: Syne, sans-serif;
+  font-family: Bricolage Grotesque, sans-serif;
   font-size: 32px;
   font-weight: 500;
   line-height: 120%;
@@ -2814,24 +2814,27 @@ img {
 .heading-11 {
   color: #303030;
   text-transform: none;
-  font-family: Syne, sans-serif;
+  font-family: Bricolage Grotesque, sans-serif;
   font-size: 30px;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 36px;
 }
 
 .heading-12 {
   color: #303030;
   margin-bottom: 2%;
-  font-family: Syne, sans-serif;
+  font-family: Bricolage Grotesque, sans-serif;
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 22px;
 }
 
 .section-12 {
   grid-column-gap: 24px;
   grid-row-gap: 24px;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 0;
   margin-left: 12%;
   margin-right: 12%;
