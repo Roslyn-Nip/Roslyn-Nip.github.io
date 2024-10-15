@@ -310,8 +310,8 @@ img {
   border-radius: 5px;
   justify-content: center;
   align-items: center;
-  min-width: 100%;
-  max-width: 100%;
+  min-width: 80vh;
+  max-width: 80vh;
   height: auto;
   min-height: 20rem;
   max-height: 20rem;
@@ -3319,6 +3319,10 @@ img {
   border: 2px solid #dedede;
   border-radius: .5rem;
   padding: 1rem;
+}
+
+.div-block-79 {
+  position: sticky;
 }
 
 @media screen and (min-width: 1440px) {
