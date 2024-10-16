@@ -1533,6 +1533,7 @@ img {
 }
 
 .image-65.yusc:hover {
+  min-width: 95%;
   max-width: 95%;
 }
 
