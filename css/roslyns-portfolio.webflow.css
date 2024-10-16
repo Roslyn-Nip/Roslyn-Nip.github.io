@@ -1364,6 +1364,8 @@ img {
   min-width: 100%;
   max-width: 100%;
   height: auto;
+  margin-left: 5rem;
+  margin-right: 3rem;
   padding: 2% 10%;
 }
 
@@ -1505,6 +1507,8 @@ img {
 .image-65.yusc {
   min-width: 100%;
   max-width: 100%;
+  margin-left: 4rem;
+  margin-right: 4rem;
   padding-left: 5%;
   padding-right: 5%;
 }
@@ -1514,14 +1518,14 @@ img {
 }
 
 .image-65.yge {
-  margin-left: 4rem;
-  margin-right: 5rem;
+  margin-left: 12rem;
+  margin-right: 12rem;
   padding-right: 10%;
 }
 
 .image-65.kivo {
   margin-left: 5rem;
-  margin-right: 5rem;
+  margin-right: 13rem;
   padding-right: 10%;
 }
 
@@ -2906,8 +2910,8 @@ img {
 
 .sunny-s-cover-img {
   min-width: auto;
-  margin-left: 15%;
-  margin-right: 3.8rem;
+  margin-left: 10rem;
+  margin-right: 12rem;
   padding-top: 7%;
   padding-left: 0;
 }
