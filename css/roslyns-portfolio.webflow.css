@@ -310,8 +310,8 @@ img {
   border-radius: 5px;
   justify-content: center;
   align-items: center;
-  min-width: 80vh;
-  max-width: 80vh;
+  min-width: 100%;
+  max-width: 100%;
   height: auto;
   min-height: 20rem;
   max-height: 20rem;
@@ -709,6 +709,15 @@ img {
   margin-bottom: 2rem;
   padding-top: 2%;
   display: grid;
+}
+
+.best-grid.tab-2col {
+  grid-column-gap: 1rem;
+  grid-row-gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+  place-content: stretch end;
+  place-items: start center;
+  width: auto;
 }
 
 .image-35 {
@@ -1480,9 +1489,12 @@ img {
 }
 
 .image-65.lawtrades {
-  min-width: 95%;
-  max-width: 95%;
+  min-width: 100%;
+  max-width: 100%;
+  margin-left: 21.9rem;
+  margin-right: 19rem;
   padding-top: 15%;
+  padding-right: 10%;
 }
 
 .image-65.lawtrades:hover {
@@ -1491,13 +1503,26 @@ img {
 }
 
 .image-65.yusc {
-  min-width: 90%;
-  max-width: 90%;
+  min-width: 100%;
+  max-width: 100%;
   padding-left: 5%;
+  padding-right: 5%;
 }
 
 .image-65.yusc:hover {
   max-width: 95%;
+}
+
+.image-65.yge {
+  margin-left: 4rem;
+  margin-right: 5rem;
+  padding-right: 10%;
+}
+
+.image-65.kivo {
+  margin-left: 5rem;
+  margin-right: 5rem;
+  padding-right: 10%;
 }
 
 .div-block-31 {
@@ -2830,7 +2855,7 @@ img {
 }
 
 .link-block-10 {
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   display: flex;
 }
@@ -2880,7 +2905,9 @@ img {
 }
 
 .sunny-s-cover-img {
+  min-width: auto;
   margin-left: 15%;
+  margin-right: 3.8rem;
   padding-top: 7%;
   padding-left: 0;
 }
@@ -3037,6 +3064,16 @@ img {
   grid-row-gap: .75rem;
   flex-flow: column;
   padding-bottom: 2rem;
+  display: flex;
+}
+
+.article_img_container {
+  flex-flow: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
   display: flex;
 }
 
