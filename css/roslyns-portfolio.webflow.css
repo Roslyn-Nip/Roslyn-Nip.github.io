@@ -1616,7 +1616,7 @@ img {
 .header-img {
   min-width: 90%;
   max-width: 100%;
-  padding-top: 0;
+  padding-top: 27rem;
   padding-left: 15%;
   padding-right: 16%;
   overflow: visible;
@@ -3205,7 +3205,7 @@ img {
 }
 
 .image-184 {
-  min-width: auto;
+  min-width: 100%;
   max-width: 100%;
   display: block;
   overflow: visible;
@@ -3221,6 +3221,8 @@ img {
   grid-column-gap: 3rem;
   grid-row-gap: 3rem;
   flex-flow: row;
+  justify-content: center;
+  align-items: center;
   display: flex;
 }
 
@@ -3254,6 +3256,11 @@ img {
 .showcase-img-container {
   width: 50%;
   display: flex;
+}
+
+.showcase-img-container.left-aligned {
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .showcase-img-container.right-aligned {
