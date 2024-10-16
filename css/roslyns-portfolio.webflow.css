@@ -725,6 +725,10 @@ img {
   display: grid;
 }
 
+.best-grid.tab-1col {
+  margin-bottom: 6rem;
+}
+
 .best-grid.tab-2col {
   grid-column-gap: 1rem;
   grid-row-gap: 1rem;
