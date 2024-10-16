@@ -513,6 +513,20 @@ img {
   display: block;
 }
 
+.container-2 {
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  display: flex;
+}
+
+.nav-menu-2 {
+  margin-left: 2rem;
+  display: flex;
+}
+
 .image-11 {
   object-fit: fill;
   width: auto;
