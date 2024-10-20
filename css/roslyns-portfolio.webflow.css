@@ -4296,6 +4296,7 @@ img {
   .best-grid.tab-2col {
     grid-column-gap: 2.5rem;
     grid-row-gap: 2.5rem;
+    grid-template-columns: 1fr;
   }
 
   .image-36 {
@@ -5083,6 +5084,13 @@ img {
 
   .div-block-27 {
     padding-left: 0%;
+  }
+
+  .image-65.lawtrades {
+    min-width: 110%;
+    max-width: 110%;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .div-block-31 {
